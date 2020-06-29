@@ -30,7 +30,7 @@ mvU = gapotTermsArrayToVector(arU);
 gapotDisplayTerms(mvU)
 
 %Create bivector using text expressions
-mvM = gapotParseBivector("2 <>, -5 <1,2>, 5<3,4>");
+mvM = gapotParseBiversor("2 <>, -5 <1,2>, 5<3,4>");
 
 fprintf("Display the terms of GAPoT multivectors\n");
 gapotDisplayTerms(mvM)

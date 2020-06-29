@@ -7,18 +7,18 @@ using GAPoTNumLib.Text;
 
 namespace GAPoTNumLib.GAPoT
 {
-    public sealed class GaPoTNumBivector
+    public sealed class GaPoTNumBiversor
     {
-        public static GaPoTNumBivector operator -(GaPoTNumBivector v)
+        public static GaPoTNumBiversor operator -(GaPoTNumBiversor v)
         {
-            return new GaPoTNumBivector(
+            return new GaPoTNumBiversor(
                 v._termsDictionary.Values.Select(t => -t)
             );
         }
 
-        public static GaPoTNumBivector operator +(GaPoTNumBivector v1, GaPoTNumBivector v2)
+        public static GaPoTNumBiversor operator +(GaPoTNumBiversor v1, GaPoTNumBiversor v2)
         {
-            var biVector = new GaPoTNumBivector();
+            var biVector = new GaPoTNumBiversor();
 
             biVector.AddTerms(v1._termsDictionary.Values);
             biVector.AddTerms(v2._termsDictionary.Values);
@@ -26,9 +26,9 @@ namespace GAPoTNumLib.GAPoT
             return biVector;
         }
 
-        public static GaPoTNumBivector operator -(GaPoTNumBivector v1, GaPoTNumBivector v2)
+        public static GaPoTNumBiversor operator -(GaPoTNumBiversor v1, GaPoTNumBiversor v2)
         {
-            var biVector = new GaPoTNumBivector();
+            var biVector = new GaPoTNumBiversor();
 
             biVector.AddTerms(v1._termsDictionary.Values);
             biVector.AddTerms(v2._termsDictionary.Values.Select(t => -t));
@@ -37,8 +37,8 @@ namespace GAPoTNumLib.GAPoT
         }
 
 
-        private readonly Dictionary2Keys<int, GaPoTNumBivectorTerm> _termsDictionary
-            = new Dictionary2Keys<int, GaPoTNumBivectorTerm>();
+        private readonly Dictionary2Keys<int, GaPoTNumBiversorTerm> _termsDictionary
+            = new Dictionary2Keys<int, GaPoTNumBiversorTerm>();
 
 
         public double this[int id1, int id2]
@@ -49,21 +49,21 @@ namespace GAPoTNumLib.GAPoT
                 .Sum();
 
 
-        internal GaPoTNumBivector()
+        internal GaPoTNumBiversor()
         {
         }
 
-        internal GaPoTNumBivector(IEnumerable<GaPoTNumBivectorTerm> termsList)
+        internal GaPoTNumBiversor(IEnumerable<GaPoTNumBiversorTerm> termsList)
         {
             foreach (var term in termsList)
                 AddTerm(term);
         }
 
 
-        public GaPoTNumBivector AddTerm(GaPoTNumBivectorTerm term)
+        public GaPoTNumBiversor AddTerm(GaPoTNumBiversorTerm term)
         {
             if (_termsDictionary.TryGetValue(term.TermId1, term.TermId2, out var oldTerm))
-                _termsDictionary[term.TermId1, term.TermId2] = new GaPoTNumBivectorTerm(
+                _termsDictionary[term.TermId1, term.TermId2] = new GaPoTNumBiversorTerm(
                     term.TermId1,
                     term.TermId2,
                     oldTerm.Value + term.Value
@@ -74,14 +74,14 @@ namespace GAPoTNumLib.GAPoT
             return this;
         }
 
-        public GaPoTNumBivector AddTerm(int id1, int id2, double value)
+        public GaPoTNumBiversor AddTerm(int id1, int id2, double value)
         {
             return AddTerm(
-                new GaPoTNumBivectorTerm(id1, id2, value)
+                new GaPoTNumBiversorTerm(id1, id2, value)
             );
         }
 
-        public GaPoTNumBivector AddTerms(IEnumerable<GaPoTNumBivectorTerm> termsList)
+        public GaPoTNumBiversor AddTerms(IEnumerable<GaPoTNumBiversorTerm> termsList)
         {
             foreach (var term in termsList)
                 AddTerm(term);
@@ -90,7 +90,7 @@ namespace GAPoTNumLib.GAPoT
         }
 
 
-        public IEnumerable<GaPoTNumBivectorTerm> GetTerms()
+        public IEnumerable<GaPoTNumBiversorTerm> GetTerms()
         {
             return _termsDictionary.Values.Where(t => !t.Value.IsNearZero());
         }
@@ -159,52 +159,52 @@ namespace GAPoTNumLib.GAPoT
         }
 
 
-        public GaPoTNumBivector GetTermPart(int id1, int id2)
+        public GaPoTNumBiversor GetTermPart(int id1, int id2)
         {
-            return new GaPoTNumBivector(
+            return new GaPoTNumBiversor(
                 _termsDictionary.Values.Where(t => t.TermId1 == id1 && t.TermId2 == id2)
             );
         }
 
-        public GaPoTNumBivector GetActivePart()
+        public GaPoTNumBiversor GetActivePart()
         {
-            return new GaPoTNumBivector(
+            return new GaPoTNumBiversor(
                 _termsDictionary.Values.Where(t => t.IsScalar)
             );
         }
 
-        public GaPoTNumBivector GetNonActivePart()
+        public GaPoTNumBiversor GetNonActivePart()
         {
-            return new GaPoTNumBivector(
+            return new GaPoTNumBiversor(
                 _termsDictionary.Values.Where(t => t.IsNonScalar)
             );
         }
 
-        public GaPoTNumBivector GetReactivePart()
+        public GaPoTNumBiversor GetReactivePart()
         {
-            return new GaPoTNumBivector(
+            return new GaPoTNumBiversor(
                 _termsDictionary.Values.Where(t => t.IsPhasor)
             );
         }
 
-        public GaPoTNumBivector GetReactiveFundamentalPart()
+        public GaPoTNumBiversor GetReactiveFundamentalPart()
         {
-            return new GaPoTNumBivector(
+            return new GaPoTNumBiversor(
                 _termsDictionary.Values.Where(t => t.TermId1 == 1 && t.TermId2 == 2)
             );
         }
 
-        public GaPoTNumBivector GetHarmPart()
+        public GaPoTNumBiversor GetHarmPart()
         {
-            return new GaPoTNumBivector(
+            return new GaPoTNumBiversor(
                 _termsDictionary.Values.Where(t => t.IsNonScalar && (t.TermId1 != 1 || t.TermId2 != 2))
             );
         }
 
 
-        public GaPoTNumBivector Reverse()
+        public GaPoTNumBiversor Reverse()
         {
-            var result = new GaPoTNumBivector();
+            var result = new GaPoTNumBiversor();
 
             foreach (var pair in _termsDictionary)
             {
@@ -217,9 +217,9 @@ namespace GAPoTNumLib.GAPoT
             return result;
         }
 
-        public GaPoTNumBivector NegativeReverse()
+        public GaPoTNumBiversor NegativeReverse()
         {
-            var result = new GaPoTNumBivector();
+            var result = new GaPoTNumBiversor();
 
             foreach (var pair in _termsDictionary)
             {
@@ -247,7 +247,7 @@ namespace GAPoTNumLib.GAPoT
             );
         }
 
-        public GaPoTNumBivector Inverse()
+        public GaPoTNumBiversor Inverse()
         {
             var norm2 = Norm2();
 
@@ -256,7 +256,7 @@ namespace GAPoTNumLib.GAPoT
 
             var value = 1.0d / norm2;
 
-            return new GaPoTNumBivector(
+            return new GaPoTNumBiversor(
                 _termsDictionary
                     .Values
                     .Select(t => t.ScaledReverse(value))

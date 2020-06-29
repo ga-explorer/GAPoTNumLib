@@ -41,6 +41,6 @@ mvM = gapotGp(mv1, mv2);
 gapotDisplayTerms(mvM)
 
 %Convert GAPoT bivector terms into MATLAB array
-a3 = full( gapotBivectorToTermsArray(mvM, 4) )
+a3 = full( gapotBiversorToTermsArray(mvM, 4) )
 
 

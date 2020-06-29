@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GAPoTNumLib", "GAPoTNumLib\GAPoTNumLib.csproj", "{66FE2070-6707-40A8-B544-CEA3E1559B56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAPoTNumLib.Framework", "GAPoTNumLib.Framework\GAPoTNumLib.Framework.csproj", "{8714753C-44C3-48A8-812C-0EBCC43639BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{66FE2070-6707-40A8-B544-CEA3E1559B56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{66FE2070-6707-40A8-B544-CEA3E1559B56}.Release|x64.ActiveCfg = Release|x64
 		{66FE2070-6707-40A8-B544-CEA3E1559B56}.Release|x64.Build.0 = Release|x64
+		{8714753C-44C3-48A8-812C-0EBCC43639BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8714753C-44C3-48A8-812C-0EBCC43639BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8714753C-44C3-48A8-812C-0EBCC43639BE}.Debug|x64.ActiveCfg = Debug|x64
+		{8714753C-44C3-48A8-812C-0EBCC43639BE}.Debug|x64.Build.0 = Debug|x64
+		{8714753C-44C3-48A8-812C-0EBCC43639BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8714753C-44C3-48A8-812C-0EBCC43639BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8714753C-44C3-48A8-812C-0EBCC43639BE}.Release|x64.ActiveCfg = Release|x64
+		{8714753C-44C3-48A8-812C-0EBCC43639BE}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

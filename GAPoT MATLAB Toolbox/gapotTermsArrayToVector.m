@@ -4,9 +4,9 @@ function mv = gapotTermsArrayToVector(array)
     m = size(array, 1);
     n = size(array, 2);
     
-    matrixData = GeometricAlgebraNumericsLib.Interop.MATLAB.GaNumMatlabSparseMatrixData.CreateMatrix(m, n, iArray, jArray, vArray);
+    matrixData = GAPoTNumLib.Interop.MATLAB.GaNumMatlabSparseMatrixData.CreateMatrix(m, n, iArray, jArray, vArray);
     
-    mv = GeometricAlgebraNumericsLib.Applications.GAPoT.GaPoTNumVector();
+    mv = GAPoTNumLib.GAPoT.GaPoTNumVector();
     
     mv.AddTerms(matrixData);
 end

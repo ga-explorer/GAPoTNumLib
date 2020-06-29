@@ -3,27 +3,27 @@ using System.Diagnostics;
 
 namespace GAPoTNumLib.GAPoT
 {
-    public sealed class GaPoTNumBivectorTerm
+    public sealed class GaPoTNumBiversorTerm
     {
-        public static GaPoTNumBivectorTerm operator -(GaPoTNumBivectorTerm t)
+        public static GaPoTNumBiversorTerm operator -(GaPoTNumBiversorTerm t)
         {
-            return new GaPoTNumBivectorTerm(t.TermId1, t.TermId2, -t.Value);
+            return new GaPoTNumBiversorTerm(t.TermId1, t.TermId2, -t.Value);
         }
 
-        public static GaPoTNumBivectorTerm operator +(GaPoTNumBivectorTerm t1, GaPoTNumBivectorTerm t2)
+        public static GaPoTNumBiversorTerm operator +(GaPoTNumBiversorTerm t1, GaPoTNumBiversorTerm t2)
         {
             if (t1.TermId1 != t2.TermId1 || t1.TermId2 != t2.TermId2)
                 throw new InvalidOperationException();
 
-            return new GaPoTNumBivectorTerm(t1.TermId1, t1.TermId2, t1.Value + t2.Value);
+            return new GaPoTNumBiversorTerm(t1.TermId1, t1.TermId2, t1.Value + t2.Value);
         }
 
-        public static GaPoTNumBivectorTerm operator -(GaPoTNumBivectorTerm t1, GaPoTNumBivectorTerm t2)
+        public static GaPoTNumBiversorTerm operator -(GaPoTNumBiversorTerm t1, GaPoTNumBiversorTerm t2)
         {
             if (t1.TermId1 != t2.TermId1 || t1.TermId2 != t2.TermId2)
                 throw new InvalidOperationException();
 
-            return new GaPoTNumBivectorTerm(t1.TermId1, t1.TermId2, t1.Value - t2.Value);
+            return new GaPoTNumBiversorTerm(t1.TermId1, t1.TermId2, t1.Value - t2.Value);
         }
 
 
@@ -43,7 +43,7 @@ namespace GAPoTNumLib.GAPoT
             => TermId1 % 2 == 1 && TermId2 == TermId1 + 1;
 
 
-        internal GaPoTNumBivectorTerm(int id1, int id2, double value)
+        internal GaPoTNumBiversorTerm(int id1, int id2, double value)
         {
             Debug.Assert(id1 > 0 && id2 > 0);
 
@@ -78,18 +78,18 @@ namespace GAPoTNumLib.GAPoT
             return Value * Value;
         }
 
-        public GaPoTNumBivectorTerm Reverse()
+        public GaPoTNumBiversorTerm Reverse()
         {
             return IsScalar 
                 ? this 
-                : new GaPoTNumBivectorTerm(TermId1, TermId2, -Value);
+                : new GaPoTNumBiversorTerm(TermId1, TermId2, -Value);
         }
 
-        public GaPoTNumBivectorTerm ScaledReverse(double s)
+        public GaPoTNumBiversorTerm ScaledReverse(double s)
         {
             return IsScalar 
-                ? new GaPoTNumBivectorTerm(TermId1, TermId2, Value * s)
-                : new GaPoTNumBivectorTerm(TermId1, TermId2, -Value * s);
+                ? new GaPoTNumBiversorTerm(TermId1, TermId2, Value * s)
+                : new GaPoTNumBiversorTerm(TermId1, TermId2, -Value * s);
         }
 
 
@@ -117,7 +117,7 @@ namespace GAPoTNumLib.GAPoT
         }
  
 
-        public GaPoTNumBivectorTerm OffsetId(int delta)
+        public GaPoTNumBiversorTerm OffsetId(int delta)
         {
             if (IsScalar)
                 return this;
@@ -125,7 +125,7 @@ namespace GAPoTNumLib.GAPoT
             var id1 = TermId1 + delta;
             var id2 = TermId2 + delta;
 
-            return new GaPoTNumBivectorTerm(id1, id2, Value);
+            return new GaPoTNumBiversorTerm(id1, id2, Value);
         }
 
         public override string ToString()

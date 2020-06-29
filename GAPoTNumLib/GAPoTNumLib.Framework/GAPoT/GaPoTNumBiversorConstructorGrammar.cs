@@ -4,12 +4,12 @@ using Irony.Parsing;
 
 namespace GAPoTNumLib.GAPoT
 {
-    public class GaPoTNumBivectorConstructorGrammar : InterpretedLanguageGrammar
+    public class GaPoTNumBiversorConstructorGrammar : InterpretedLanguageGrammar
     {
         //Examples:
         //GAPoT bivector using terms form:
         //  -1.3<>, 1.2<1,2>, -4.6<3,4>
-        public GaPoTNumBivectorConstructorGrammar()
+        public GaPoTNumBiversorConstructorGrammar()
             : base(caseSensitive: true)
         {
             // 1. Terminals
