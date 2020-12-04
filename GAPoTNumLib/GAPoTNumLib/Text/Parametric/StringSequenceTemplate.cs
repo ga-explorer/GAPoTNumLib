@@ -1,4 +1,4 @@
-﻿namespace GAPoTNumLib.Text.Parametric
+﻿namespace GAPoTNumLib.Framework.Text.Parametric
 {
     public sealed class StringSequenceTemplate : ParametricTextComposer
     {

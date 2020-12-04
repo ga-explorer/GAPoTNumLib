@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GAPoTNumLib.Text.Markdown.Tables;
+using GAPoTNumLib.Framework.Text.Markdown.Tables;
 
-namespace GAPoTNumLib.Text.Markdown
+namespace GAPoTNumLib.Framework.Text.Markdown
 {
     public static class MarkdownUtils
     {

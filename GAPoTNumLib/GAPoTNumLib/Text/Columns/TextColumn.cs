@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GAPoTNumLib.Text.Columns
+namespace GAPoTNumLib.Framework.Text.Columns
 {
     public sealed class TextColumn : List<string>
     {

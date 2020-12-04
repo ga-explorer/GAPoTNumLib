@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
-using GAPoTNumLib.GAPoT;
+using GAPoTNumLib.Framework.GAPoT;
 
-namespace GAPoTNumLib.Samples
+namespace GAPoTNumLib.Framework.Samples
 {
     public static class Sample2
     {

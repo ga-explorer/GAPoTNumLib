@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using GAPoTNumLib.Structures;
+using GAPoTNumLib.Framework.Structures;
 
-namespace GAPoTNumLib.Text.Structured
+namespace GAPoTNumLib.Framework.Text.Structured
 {
     public sealed class PriorityQueueTextComposer<TPriority> : PriorityQueue<TPriority, StructuredTextItem>, IStructuredTextComposer
     {

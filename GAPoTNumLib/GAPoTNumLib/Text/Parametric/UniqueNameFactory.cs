@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GAPoTNumLib.Text.Parametric
+namespace GAPoTNumLib.Framework.Text.Parametric
 {
     public sealed class UniqueNameFactory : ParametricTextComposer
     {

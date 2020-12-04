@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace GAPoTNumLib.Text.Tabular
+namespace GAPoTNumLib.Framework.Text.Tabular
 {
     public class ArrayPrinter
     {

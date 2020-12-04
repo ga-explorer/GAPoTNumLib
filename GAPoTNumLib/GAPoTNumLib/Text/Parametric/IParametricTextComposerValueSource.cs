@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GAPoTNumLib.Text.Parametric
+namespace GAPoTNumLib.Framework.Text.Parametric
 {
     /// <summary>
     /// Any class implementing this interface can be used to fill the values of parameters of a parametric

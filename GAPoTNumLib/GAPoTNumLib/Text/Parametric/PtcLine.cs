@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GAPoTNumLib.Text.Parametric
+namespace GAPoTNumLib.Framework.Text.Parametric
 {
     internal sealed class PtcLine
     {

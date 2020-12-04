@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace GAPoTNumLib.Text.Linear.LineHeader
+namespace GAPoTNumLib.Framework.Text.Linear.LineHeader
 {
     public sealed class LtcStopWatch : LtcLineHeader
     {

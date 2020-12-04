@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace GAPoTNumLib.GAPoT
+namespace GAPoTNumLib.Framework.GAPoT
 {
     public sealed class GaPoTNumVectorTerm
     {

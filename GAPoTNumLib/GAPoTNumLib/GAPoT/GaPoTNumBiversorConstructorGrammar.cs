@@ -2,12 +2,12 @@
 using Irony.Interpreter.Evaluator;
 using Irony.Parsing;
 
-namespace GAPoTNumLib.GAPoT
+namespace GAPoTNumLib.Framework.GAPoT
 {
     public class GaPoTNumBiversorConstructorGrammar : InterpretedLanguageGrammar
     {
         //Examples:
-        //GAPoT bivector using terms form:
+        //GAPoT biversor using terms form:
         //  -1.3<>, 1.2<1,2>, -4.6<3,4>
         public GaPoTNumBiversorConstructorGrammar()
             : base(caseSensitive: true)
@@ -19,23 +19,23 @@ namespace GAPoTNumLib.GAPoT
             var comma1 = ToTerm(",");
 
             // 2. Non-terminals
-            var bivector = new NonTerminal("bivector");
-            var bivectorTerm = new NonTerminal("bivectorTerm");
-            var bivectorTerm0 = new NonTerminal("bivectorTerm0");
-            var bivectorTerm2 = new NonTerminal("bivectorTerm2");
+            var biversor = new NonTerminal("biversor");
+            var biversorTerm = new NonTerminal("biversorTerm");
+            var biversorTerm0 = new NonTerminal("biversorTerm0");
+            var biversorTerm2 = new NonTerminal("biversorTerm2");
 
-            bivectorTerm0.Rule = number + "<" + ">";
-            bivectorTerm2.Rule = number + "<" + number + comma1 + number + ">";
-            bivectorTerm.Rule = bivectorTerm0 | bivectorTerm2;
-            bivector.Rule = MakePlusRule(bivector, comma1, bivectorTerm);
+            biversorTerm0.Rule = number + "<" + ">";
+            biversorTerm2.Rule = number + "<" + number + comma1 + number + ">";
+            biversorTerm.Rule = biversorTerm0 | biversorTerm2;
+            biversor.Rule = MakePlusRule(biversor, comma1, biversorTerm);
 
             // Set grammar root
-            Root = bivector;
+            Root = biversor;
 
             // 5. Punctuation and transient terms
             MarkPunctuation("<", ">", ",");
             RegisterBracePair("<", ">");
-            MarkTransient(bivectorTerm);
+            MarkTransient(biversorTerm);
 
             // 7. Syntax error reporting
             AddToNoReportGroup("<");
@@ -50,24 +50,5 @@ namespace GAPoTNumLib.GAPoT
         {
             return new ExpressionEvaluatorRuntime(language);
         }
-
-        //#region Running in Grammar Explorer
-        //private static GaPoTMultivectorFactory _evaluator;
-        //public override string RunSample(RunSampleArgs args)
-        //{
-        //    if (_evaluator == null)
-        //    {
-        //        _evaluator = new GaPoTMultivectorFactory(this);
-        //        _evaluator.Globals.Add("null", _evaluator.Runtime.NoneValue);
-        //        _evaluator.Globals.Add("true", true);
-        //        _evaluator.Globals.Add("false", false);
-
-        //    }
-        //    _evaluator.ClearOutput();
-        //    //for (int i = 0; i < 1000; i++)  //for perf measurements, to execute 1000 times
-        //    _evaluator.Evaluate(args.ParsedSample);
-        //    return _evaluator.GetOutput();
-        //}
-        //#endregion
     }
 }

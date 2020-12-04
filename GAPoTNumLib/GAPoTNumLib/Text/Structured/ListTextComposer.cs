@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GAPoTNumLib.Text.Structured
+namespace GAPoTNumLib.Framework.Text.Structured
 {
     public sealed class ListTextComposer : List<StructuredTextItem>, IStructuredTextComposer
     {

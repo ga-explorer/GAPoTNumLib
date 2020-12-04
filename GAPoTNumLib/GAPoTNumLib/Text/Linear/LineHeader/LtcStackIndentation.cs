@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace GAPoTNumLib.Text.Linear.LineHeader
+namespace GAPoTNumLib.Framework.Text.Linear.LineHeader
 {
     public sealed class LtcStackIndentation : LtcLineHeader
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace GAPoTNumLib.Text.Parametric
+namespace GAPoTNumLib.Framework.Text.Parametric
 {
     internal sealed class PtcParameter
     {

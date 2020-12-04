@@ -4,9 +4,5 @@ function mv = gapotPolarPhasorsArrayToVector(array)
     m = size(array, 1);
     n = size(array, 2);
     
-    matrixData = GAPoTNumLib.Interop.MATLAB.GaNumMatlabSparseMatrixData.CreateMatrix(m, n, iArray, jArray, vArray);
-    
-    mv = GAPoTNumLib.GAPoT.GaPoTNumVector();
-    
-    mv.AddPolarPhasors(matrixData);
+    mv = GAPoTNumLib.Framework.GaPoTNumMatlabUtils.PolarPhasorsArrayToVector(m, n, iArray, jArray, vArray);
 end

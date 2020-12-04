@@ -1,16 +1,16 @@
 ﻿using System;
-using GAPoTNumLib.GAPoT;
-using GAPoTNumLib.Structures;
-using GAPoTNumLib.Text.Markdown;
+using GAPoTNumLib.Framework.GAPoT;
+using GAPoTNumLib.Framework.Structures;
+using GAPoTNumLib.Framework.Text.Markdown;
 
-namespace GAPoTNumLib.Samples
+namespace GAPoTNumLib.Framework.Samples
 {
     public static class ParsingSample3
     {
         public static void Execute()
         {
             //Examples:
-            //GAPoT bivector using terms form:
+            //GAPoT biversor using terms form:
             //  -1.3<>, 1.2<1,2>, -4.6<3,4>
 
             var sourceText =
@@ -21,20 +21,20 @@ namespace GAPoTNumLib.Samples
                 sourceText
             );
 
-            var bivector = sourceText.GaPoTNumParseBiversor();
+            var biversor = sourceText.GaPoTNumParseBiversor();
 
             var composer = new MarkdownComposer();
 
             composer
                 .AppendLine(parsingResults.ToString());
 
-            if (!parsingResults.ContainsErrorMessages && bivector != null)
+            if (!parsingResults.ContainsErrorMessages && biversor != null)
             {
                 composer
                     .AppendLine()
-                    .AppendLine(bivector.TermsToText())
+                    .AppendLine(biversor.TermsToText())
                     .AppendLine()
-                    .AppendLine(bivector.TermsToLaTeX());
+                    .AppendLine(biversor.TermsToLaTeX());
             }
 
             Console.WriteLine(composer.ToString());

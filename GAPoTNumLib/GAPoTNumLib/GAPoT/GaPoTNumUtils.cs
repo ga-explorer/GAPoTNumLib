@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using GAPoTNumLib.Interop.MATLAB;
-using GAPoTNumLib.Structures;
+using GAPoTNumLib.Framework.Interop.MATLAB;
+using GAPoTNumLib.Framework.Structures;
 using Irony.Parsing;
 
-namespace GAPoTNumLib.GAPoT
+namespace GAPoTNumLib.Framework.GAPoT
 {
     public static class GaPoTNumUtils
     {
@@ -128,22 +128,22 @@ namespace GAPoTNumLib.GAPoT
 
         private static GaPoTNumBiversor GaPoTNumParseBiversor(IronyParsingResults parsingResults, ParseTreeNode rootNode)
         {
-            if (rootNode.ToString() != "bivector")
+            if (rootNode.ToString() != "biversor")
                 throw new SyntaxErrorException(parsingResults.ToString());
 
-            var bivector = new GaPoTNumBiversor();
+            var biversor = new GaPoTNumBiversor();
 
             var vectorNode = rootNode;
             foreach (var vectorElementNode in vectorNode.ChildNodes)
             {
-                if (vectorElementNode.ToString() == "bivectorTerm0")
+                if (vectorElementNode.ToString() == "biversorTerm0")
                 {
                     //Scalar term
                     var value = double.Parse(vectorElementNode.ChildNodes[0].FindTokenAndGetText());
 
-                    bivector.AddTerm(1, 1, value);
+                    biversor.AddTerm(1, 1, value);
                 }
-                else if (vectorElementNode.ToString() == "bivectorTerm2")
+                else if (vectorElementNode.ToString() == "biversorTerm2")
                 {
                     //Biversor term
                     var value = double.Parse(vectorElementNode.ChildNodes[0].FindTokenAndGetText());
@@ -153,7 +153,7 @@ namespace GAPoTNumLib.GAPoT
                     if (id1 < 0 || id2 < 0)
                         throw new SyntaxErrorException(parsingResults.ToString());
 
-                    bivector.AddTerm(id1, id2, value);
+                    biversor.AddTerm(id1, id2, value);
                 }
                 else
                 {
@@ -161,7 +161,7 @@ namespace GAPoTNumLib.GAPoT
                 }
             }
 
-            return bivector;
+            return biversor;
         }
 
         public static GaPoTNumBiversor GaPoTNumParseBiversor(this string sourceText)

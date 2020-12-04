@@ -72,17 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GAPoT\GaPoTNumBiversor.cs" />
-    <Compile Include="GAPoT\GaPoTNumBiversorConstructorGrammar.cs" />
-    <Compile Include="GAPoT\GaPoTNumBiversorTerm.cs" />
-    <Compile Include="GAPoT\GaPoTNumPolarPhasor.cs" />
-    <Compile Include="GAPoT\GaPoTNumRectPhasor.cs" />
-    <Compile Include="GAPoT\GaPoTNumUtils.cs" />
-    <Compile Include="GAPoT\GaPoTNumVector.cs" />
-    <Compile Include="GAPoT\GaPoTNumVectorConstructorGrammar.cs" />
-    <Compile Include="GAPoT\GaPoTNumVectorTerm.cs" />
-    <Compile Include="Interop\MATLAB\GaNumMatlabSparseMatrixData.cs" />
-    <Compile Include="Interop\MATLAB\MatlabUtils.cs" />
+    <Compile Include="GaPoTNumMatlabUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Samples\ParsingSample1.cs" />
@@ -94,59 +84,16 @@
     <Compile Include="Samples\Sample4.cs" />
     <Compile Include="Samples\Sample5.cs" />
     <Compile Include="Samples\Sample6.cs" />
-    <Compile Include="Structures\Dictionary2Keys.cs" />
-    <Compile Include="Structures\IronyParsingResults.cs" />
-    <Compile Include="Structures\PriorityQueue.cs" />
-    <Compile Include="Text\Attributes\AttributesTextComposer.cs" />
-    <Compile Include="Text\Columns\TextColumn.cs" />
-    <Compile Include="Text\Columns\TextColumnsComposer.cs" />
-    <Compile Include="Text\Columns\TextColumnSpecs.cs" />
-    <Compile Include="Text\Columns\TextRowSpecs.cs" />
-    <Compile Include="Text\Linear\LinearTextComposer.cs" />
-    <Compile Include="Text\Linear\LinearTextComposerUtils.cs" />
-    <Compile Include="Text\Linear\LineHeader\LtcIndentation.cs" />
-    <Compile Include="Text\Linear\LineHeader\LtcLineCount.cs" />
-    <Compile Include="Text\Linear\LineHeader\LtcLineHeader.cs" />
-    <Compile Include="Text\Linear\LineHeader\LtcStackIndentation.cs" />
-    <Compile Include="Text\Linear\LineHeader\LtcStopWatch.cs" />
-    <Compile Include="Text\Linear\LineHeader\LtcTimeStamp.cs" />
-    <Compile Include="Text\Literals\HtmlLiterals.cs" />
-    <Compile Include="Text\Markdown\MarkdownComposer.cs" />
-    <Compile Include="Text\Markdown\MarkdownUtils.cs" />
-    <Compile Include="Text\Markdown\Tables\MarkdownTable.cs" />
-    <Compile Include="Text\Markdown\Tables\MarkdownTableColumn.cs" />
-    <Compile Include="Text\Parametric\IParametricTextComposerValueSource.cs" />
-    <Compile Include="Text\Parametric\ParametricTextComposer.cs" />
-    <Compile Include="Text\Parametric\ParametricTextComposerCollection.cs" />
-    <Compile Include="Text\Parametric\ParametricUtils.cs" />
-    <Compile Include="Text\Parametric\PtcLine.cs" />
-    <Compile Include="Text\Parametric\PtcLineSegment.cs" />
-    <Compile Include="Text\Parametric\PtcParameter.cs" />
-    <Compile Include="Text\Parametric\StringSequenceTemplate.cs" />
-    <Compile Include="Text\Parametric\UniqueNameFactory.cs" />
-    <Compile Include="Text\StringUtils.cs" />
-    <Compile Include="Text\Structured\DictionaryTextComposer.cs" />
-    <Compile Include="Text\Structured\IStructuredTextComposer.cs" />
-    <Compile Include="Text\Structured\ListComposerCollection.cs" />
-    <Compile Include="Text\Structured\ListTextComposer.cs" />
-    <Compile Include="Text\Structured\PriorityQueueTextComposer.cs" />
-    <Compile Include="Text\Structured\QueueTextComposer.cs" />
-    <Compile Include="Text\Structured\SequenceTextComposer.cs" />
-    <Compile Include="Text\Structured\StackTextComposer.cs" />
-    <Compile Include="Text\Structured\StructuredTextComposerUtils.cs" />
-    <Compile Include="Text\Structured\StructuredTextItem.cs" />
-    <Compile Include="Text\Tabular\ArrayPrinter.cs" />
-    <Compile Include="Text\Tabular\TableComposer.cs" />
-    <Compile Include="Text\Tabular\TableComposerColumn.cs" />
-    <Compile Include="Text\Tabular\TableComposerRow.cs" />
-    <Compile Include="Text\TextUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Text\Linear\LinearComposer.cd" />
-    <None Include="Text\Parametric\ParametricComposer.cd" />
-    <None Include="Text\Structured\Structured-Composers.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GAPoTNumLib\GAPoTNumLib.csproj">
+      <Project>{19c44e17-f5ad-46f0-a6b8-c2e3f3aa9a07}</Project>
+      <Name>GAPoTNumLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

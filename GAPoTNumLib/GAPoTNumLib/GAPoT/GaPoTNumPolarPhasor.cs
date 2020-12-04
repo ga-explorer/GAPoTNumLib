@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace GAPoTNumLib.GAPoT
+namespace GAPoTNumLib.Framework.GAPoT
 {
     public sealed class GaPoTNumPolarPhasor
     {

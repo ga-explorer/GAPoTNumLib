@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace GAPoTNumLib.Interop.MATLAB
+namespace GAPoTNumLib.Framework.Interop.MATLAB
 {
     /// <summary>
     /// Used for exchanging sparse matrix data with MATLAB

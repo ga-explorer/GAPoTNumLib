@@ -1,4 +1,4 @@
-﻿namespace GAPoTNumLib.Text.Tabular
+﻿namespace GAPoTNumLib.Framework.Text.Tabular
 {
     public sealed class TableComposerRow
     {

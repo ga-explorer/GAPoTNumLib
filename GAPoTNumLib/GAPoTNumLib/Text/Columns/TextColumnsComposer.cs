@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GAPoTNumLib.Text.Columns
+namespace GAPoTNumLib.Framework.Text.Columns
 {
     public sealed class TextColumnsComposer : IEnumerable<TextColumn>
     {

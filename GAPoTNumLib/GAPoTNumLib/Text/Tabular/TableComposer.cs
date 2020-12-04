@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using GAPoTNumLib.Text.Linear;
+using GAPoTNumLib.Framework.Text.Linear;
 
-namespace GAPoTNumLib.Text.Tabular
+namespace GAPoTNumLib.Framework.Text.Tabular
 {
     //TODO: Complete this
     public sealed class TableComposer

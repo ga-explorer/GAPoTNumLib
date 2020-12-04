@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GAPoTNumLib.Text.Structured
+namespace GAPoTNumLib.Framework.Text.Structured
 {
     public interface IStructuredTextComposer
     {

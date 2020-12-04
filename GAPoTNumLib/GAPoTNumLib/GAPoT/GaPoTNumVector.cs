@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GAPoTNumLib.Interop.MATLAB;
-using GAPoTNumLib.Text; //using CodeComposerLib.MathML.Values;
+using GAPoTNumLib.Framework.Interop.MATLAB;
+using GAPoTNumLib.Framework.Text; //using CodeComposerLib.MathML.Values;
 
-namespace GAPoTNumLib.GAPoT
+namespace GAPoTNumLib.Framework.GAPoT
 {
     public sealed class GaPoTNumVector : IReadOnlyList<double>
     {
@@ -65,7 +65,7 @@ namespace GAPoTNumLib.GAPoT
         /// <returns></returns>
         public static GaPoTNumBiversor operator *(GaPoTNumVector v1, GaPoTNumVector v2)
         {
-            var bivector = new GaPoTNumBiversor();
+            var biversor = new GaPoTNumBiversor();
 
             foreach (var term1 in v1.GetTerms())
             {
@@ -73,7 +73,7 @@ namespace GAPoTNumLib.GAPoT
                 {
                     var scalarValue = term1.Value * term2.Value;
 
-                    bivector.AddTerm(
+                    biversor.AddTerm(
                         term1.TermId, 
                         term2.TermId, 
                         scalarValue
@@ -81,7 +81,7 @@ namespace GAPoTNumLib.GAPoT
                 }
             }
 
-            return bivector;
+            return biversor;
         }
 
         public static GaPoTNumVector operator *(GaPoTNumBiversor bv1, GaPoTNumVector v2)

@@ -4,8 +4,8 @@ function sparseArray = gapotSparseMatrixDataToArray(sparseMatrixData)
     
     vArray = double(sparseMatrixData.ValuesArray);
     
-    m = int32(sparseMatrixData.RowsCount);
-    n = int32(sparseMatrixData.ColumnsCount);
+    m = double(sparseMatrixData.RowsCount);
+    n = double(sparseMatrixData.ColumnsCount);
     
     sparseArray = sparse(iArray, jArray, vArray, m, n);
 end

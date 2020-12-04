@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GAPoTNumLib.Interop.MATLAB;
-using GAPoTNumLib.Structures;
-using GAPoTNumLib.Text;
+using GAPoTNumLib.Framework.Interop.MATLAB;
+using GAPoTNumLib.Framework.Structures;
+using GAPoTNumLib.Framework.Text;
 
-namespace GAPoTNumLib.GAPoT
+namespace GAPoTNumLib.Framework.GAPoT
 {
     public sealed class GaPoTNumBiversor
     {
@@ -18,22 +18,22 @@ namespace GAPoTNumLib.GAPoT
 
         public static GaPoTNumBiversor operator +(GaPoTNumBiversor v1, GaPoTNumBiversor v2)
         {
-            var biVector = new GaPoTNumBiversor();
+            var biversor = new GaPoTNumBiversor();
 
-            biVector.AddTerms(v1._termsDictionary.Values);
-            biVector.AddTerms(v2._termsDictionary.Values);
+            biversor.AddTerms(v1._termsDictionary.Values);
+            biversor.AddTerms(v2._termsDictionary.Values);
 
-            return biVector;
+            return biversor;
         }
 
         public static GaPoTNumBiversor operator -(GaPoTNumBiversor v1, GaPoTNumBiversor v2)
         {
-            var biVector = new GaPoTNumBiversor();
+            var biversor = new GaPoTNumBiversor();
 
-            biVector.AddTerms(v1._termsDictionary.Values);
-            biVector.AddTerms(v2._termsDictionary.Values.Select(t => -t));
+            biversor.AddTerms(v1._termsDictionary.Values);
+            biversor.AddTerms(v2._termsDictionary.Values.Select(t => -t));
 
-            return biVector;
+            return biversor;
         }
 
 

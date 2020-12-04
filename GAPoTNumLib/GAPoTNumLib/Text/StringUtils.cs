@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace GAPoTNumLib.Text
+namespace GAPoTNumLib.Framework.Text
 {
     public static class StringUtils
     {

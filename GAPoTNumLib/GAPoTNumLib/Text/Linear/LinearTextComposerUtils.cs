@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GAPoTNumLib.Text.Parametric;
+using GAPoTNumLib.Framework.Text.Parametric;
 
-namespace GAPoTNumLib.Text.Linear
+namespace GAPoTNumLib.Framework.Text.Linear
 {
     public static class LinearTextComposerUtils
     {

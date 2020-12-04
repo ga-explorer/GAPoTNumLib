@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
-using GAPoTNumLib.GAPoT;
+using GAPoTNumLib.Framework.GAPoT;
 
-namespace GAPoTNumLib.Samples
+namespace GAPoTNumLib.Framework.Samples
 {
     public static class Sample5
     {
@@ -27,7 +27,7 @@ namespace GAPoTNumLib.Samples
 
             var mvM = mvU * mvI;
 
-            //This computes per-phase impedance bivectors;
+            //This computes per-phase impedance biversors;
             //here we have two phases, each phase contains 2 terms.
             var mvUParts = mvU.GetParts(2, 2);
             var mvIParts = mvI.GetParts(2, 2);
@@ -44,7 +44,7 @@ namespace GAPoTNumLib.Samples
             Console.WriteLine($@"M = {mvM.TermsToText()}");
             Console.WriteLine();
 
-            Console.WriteLine(@"Display parts of power bivector");
+            Console.WriteLine(@"Display parts of power biversor");
             Console.WriteLine($@"Active total = {mvM.GetActiveTotal():G}");
             Console.WriteLine($@"Active part = {mvM.GetActivePart().ToLaTeX()}");
             Console.WriteLine($@"Reactive total = {mvM.GetReactiveTotal():G}");

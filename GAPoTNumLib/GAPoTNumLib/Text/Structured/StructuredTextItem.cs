@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace GAPoTNumLib.Text.Structured
+namespace GAPoTNumLib.Framework.Text.Structured
 {
     public sealed class StructuredTextItem
     {

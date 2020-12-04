@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GAPoTNumLib.Samples;
+using GAPoTNumLib.Framework.Samples;
 
 namespace GAPoTNumLib.Framework
 {

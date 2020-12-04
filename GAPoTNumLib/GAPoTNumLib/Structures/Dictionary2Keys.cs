@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GAPoTNumLib.Structures
+namespace GAPoTNumLib.Framework.Structures
 {
     /// <inheritdoc />
     /// <summary>

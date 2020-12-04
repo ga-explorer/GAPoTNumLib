@@ -1,9 +1,9 @@
 ﻿using System;
-using GAPoTNumLib.GAPoT;
-using GAPoTNumLib.Structures;
-using GAPoTNumLib.Text.Markdown;
+using GAPoTNumLib.Framework.GAPoT;
+using GAPoTNumLib.Framework.Structures;
+using GAPoTNumLib.Framework.Text.Markdown;
 
-namespace GAPoTNumLib.Samples
+namespace GAPoTNumLib.Framework.Samples
 {
     public static class ParsingSample2
     {

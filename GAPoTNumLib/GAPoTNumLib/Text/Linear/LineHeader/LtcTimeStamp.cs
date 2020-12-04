@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace GAPoTNumLib.Text.Linear.LineHeader
+namespace GAPoTNumLib.Framework.Text.Linear.LineHeader
 {
     public sealed class LtcTimeStamp : LtcLineHeader
     {
