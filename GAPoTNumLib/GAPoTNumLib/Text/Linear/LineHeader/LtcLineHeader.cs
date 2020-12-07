@@ -1,4 +1,4 @@
-﻿namespace GAPoTNumLib.Framework.Text.Linear.LineHeader
+﻿namespace GAPoTNumLib.Text.Linear.LineHeader
 {
     public abstract class LtcLineHeader
     {

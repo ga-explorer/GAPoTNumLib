@@ -1,4 +1,4 @@
-﻿namespace GAPoTNumLib.Framework.Text.Parametric
+﻿namespace GAPoTNumLib.Text.Parametric
 {
     internal sealed class PtcLineSegment
     {

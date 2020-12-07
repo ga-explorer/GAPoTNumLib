@@ -1,4 +1,4 @@
-%Create a GAPoT vector from terms in the first column of a MATLAB array
+% Create a GAPoT vector from terms in the first column of a MATLAB array
 function mv = gapotTermsArrayToVector(array)
     [iArray, jArray, vArray] = find(array(:, 1));
     m = size(array, 1);

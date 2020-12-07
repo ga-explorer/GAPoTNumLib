@@ -1,6 +1,6 @@
-﻿using GAPoTNumLib.Framework.Text.Linear;
+﻿using GAPoTNumLib.Text.Linear;
 
-namespace GAPoTNumLib.Framework.Text.Markdown
+namespace GAPoTNumLib.Text.Markdown
 {
     public class MarkdownComposer : LinearTextComposer
     {

@@ -75,6 +75,8 @@
     <Compile Include="GaPoTNumMatlabUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\Construction\BiversorConstructionSample.cs" />
+    <Compile Include="Samples\Construction\VectorConstructionSample.cs" />
     <Compile Include="Samples\ParsingSample1.cs" />
     <Compile Include="Samples\ParsingSample2.cs" />
     <Compile Include="Samples\ParsingSample3.cs" />
@@ -95,5 +97,6 @@
       <Name>GAPoTNumLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

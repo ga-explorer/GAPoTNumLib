@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using GAPoTNumLib.Framework.GAPoT;
+using GAPoTNumLib.GAPoT;
 
 namespace GAPoTNumLib.Framework.Samples
 {

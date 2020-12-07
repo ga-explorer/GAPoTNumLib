@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using GAPoTNumLib.Framework.Text.Linear.LineHeader;
+using GAPoTNumLib.Text.Linear.LineHeader;
 
-namespace GAPoTNumLib.Framework.Text.Linear
+namespace GAPoTNumLib.Text.Linear
 {
     public class LinearTextComposer
     {

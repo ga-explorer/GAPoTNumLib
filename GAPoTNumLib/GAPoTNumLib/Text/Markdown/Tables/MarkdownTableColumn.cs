@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GAPoTNumLib.Framework.Text.Markdown.Tables
+namespace GAPoTNumLib.Text.Markdown.Tables
 {
     public enum MarkdownTableColumnAlignment
     {

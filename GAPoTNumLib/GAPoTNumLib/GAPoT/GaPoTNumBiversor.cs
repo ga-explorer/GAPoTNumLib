@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GAPoTNumLib.Framework.Interop.MATLAB;
-using GAPoTNumLib.Framework.Structures;
-using GAPoTNumLib.Framework.Text;
+using GAPoTNumLib.Interop.MATLAB;
+using GAPoTNumLib.Structures;
+using GAPoTNumLib.Text;
 
-namespace GAPoTNumLib.Framework.GAPoT
+namespace GAPoTNumLib.GAPoT
 {
     public sealed class GaPoTNumBiversor
     {
@@ -42,11 +42,18 @@ namespace GAPoTNumLib.Framework.GAPoT
 
 
         public double this[int id1, int id2]
-            => _termsDictionary
-                .Values
-                .Where(t => t.TermId1 == id1 && t.TermId2 == id2)
-                .Select(v => v.Value)
-                .Sum();
+        {
+            get
+            {
+                (id1, id2) = GaPoTNumUtils.ValidateBiversorTermIDs(id1, id2);
+
+                return _termsDictionary
+                    .Values
+                    .Where(t => t.TermId1 == id1 && t.TermId2 == id2)
+                    .Select(v => v.Value)
+                    .Sum();
+            }
+        }
 
 
         internal GaPoTNumBiversor()
@@ -62,14 +69,15 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public GaPoTNumBiversor AddTerm(GaPoTNumBiversorTerm term)
         {
-            if (_termsDictionary.TryGetValue(term.TermId1, term.TermId2, out var oldTerm))
-                _termsDictionary[term.TermId1, term.TermId2] = new GaPoTNumBiversorTerm(
-                    term.TermId1,
-                    term.TermId2,
-                    oldTerm.Value + term.Value
-                );
+            //The input term IDs is already validation by construction, no validation is needed here
+            var id1 = term.TermId1;
+            var id2 = term.TermId2;
+
+            if (_termsDictionary.TryGetValue(id1, id2, out var oldTerm))
+                _termsDictionary[id1, id2] = 
+                    new GaPoTNumBiversorTerm(id1, id2, oldTerm.Value + term.Value);
             else
-                _termsDictionary.Add(term.TermId1, term.TermId2, term);
+                _termsDictionary.Add(id1, id2, term);
 
             return this;
         }
@@ -106,11 +114,20 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public double GetTermValue(int id1, int id2)
         {
+            (id1, id2) = GaPoTNumUtils.ValidateBiversorTermIDs(id1, id2);
+
             return _termsDictionary
                 .Values
                 .Where(t => t.TermId1 == id1 && t.TermId2 == id2)
                 .Select(v => v.Value)
                 .Sum();
+        }
+
+        public GaPoTNumBiversorTerm GetTerm(int id1, int id2)
+        {
+            var value = GetTermValue(id1, id2);
+
+            return new GaPoTNumBiversorTerm(id1, id2, value);
         }
 
         public double GetActiveTotal()
@@ -161,6 +178,8 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public GaPoTNumBiversor GetTermPart(int id1, int id2)
         {
+            (id1, id2) = GaPoTNumUtils.ValidateBiversorTermIDs(id1, id2);
+
             return new GaPoTNumBiversor(
                 _termsDictionary.Values.Where(t => t.TermId1 == id1 && t.TermId2 == id2)
             );

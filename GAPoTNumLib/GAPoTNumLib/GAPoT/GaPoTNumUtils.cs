@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using GAPoTNumLib.Framework.Interop.MATLAB;
-using GAPoTNumLib.Framework.Structures;
+using GAPoTNumLib.Interop.MATLAB;
+using GAPoTNumLib.Structures;
 using Irony.Parsing;
 
-namespace GAPoTNumLib.Framework.GAPoT
+namespace GAPoTNumLib.GAPoT
 {
     public static class GaPoTNumUtils
     {
@@ -55,6 +56,35 @@ namespace GAPoTNumLib.Framework.GAPoT
             return Math.Round(value, LaTeXDecimalPlaces).ToString("G");
         }
 
+        public static string GetLaTeXAngleInDegrees(this double angleInRadians)
+        {
+            var angleInDegrees = angleInRadians.RadiansToDegrees().GetLaTeXNumber();
+
+            return angleInDegrees + @"^{\circ}";
+        }
+
+        public static double DegreesToRadians(this double angle)
+        {
+            return angle * Math.PI / 180.0d;
+        }
+
+        public static double RadiansToDegrees(this double angle)
+        {
+            return angle * 180.0d / Math.PI;
+        }
+
+        internal static Tuple<int, int> ValidateBiversorTermIDs(int id1, int id2)
+        {
+            Debug.Assert(id1 == id2 || (id1 > 0 && id2 > 0));
+
+            if (id1 == id2)
+                return new Tuple<int, int>(0, 0);
+
+            return id1 < id2 
+                ? new Tuple<int, int>(id1, id2) 
+                : new Tuple<int, int>(id2, id1);
+        }
+
 
         private static GaPoTNumVector GaPoTNumParseVector(IronyParsingResults parsingResults, ParseTreeNode rootNode)
         {
@@ -87,6 +117,9 @@ namespace GAPoTNumLib.Framework.GAPoT
 
                     if (id1 < 0 || id2 != id1 + 1)
                         throw new SyntaxErrorException(parsingResults.ToString());
+
+                    //Convert phase from degrees to radians
+                    phase = phase.DegreesToRadians();
 
                     vector.AddPolarPhasor(id1, magnitude, phase);
                 }
@@ -270,6 +303,33 @@ namespace GAPoTNumLib.Framework.GAPoT
             return result;
         }
 
+        public static GaNumMatlabSparseMatrixData RectPhasorsToMatlabArray(this IEnumerable<GaPoTNumRectPhasor> phasorsList, int rowsCount)
+        {
+            var termsArray = 
+                phasorsList
+                    .OrderBy(t => t.Id)
+                    .ToArray();
+
+            var result = GaNumMatlabSparseMatrixData.CreateMatrix(
+                rowsCount, 
+                2,
+                termsArray.Length * 2
+            );
+
+            var sparseIndex = 0;
+            foreach (var term in termsArray)
+            {
+                var row = (term.Id - 1) / 2 + 1;
+
+                result.SetItem(sparseIndex, row, 1, term.XValue);
+                result.SetItem(sparseIndex + 1, row, 2, term.YValue);
+
+                sparseIndex += 2;
+            }
+
+            return result;
+        }
+
         public static GaNumMatlabSparseMatrixData TermsToMatlabArray(this IEnumerable<GaPoTNumVectorTerm> termsList, int rowsCount)
         {
             var termsArray = 
@@ -318,7 +378,7 @@ namespace GAPoTNumLib.Framework.GAPoT
 
                 foreach (var term in termsArray)
                 {
-                    result.SetItem(sparseIndex, term.TermId, j, term.Value);
+                    result.SetItem(sparseIndex, term.TermId, j + 1, term.Value);
 
                     sparseIndex++;
                 }
@@ -344,8 +404,8 @@ namespace GAPoTNumLib.Framework.GAPoT
             {
                 result.SetItem(
                     sparseIndex,
-                    term.TermId1,
-                    term.TermId2,
+                    term.TermId1 + 1,
+                    term.TermId2 + 1,
                     term.Value
                 );
 

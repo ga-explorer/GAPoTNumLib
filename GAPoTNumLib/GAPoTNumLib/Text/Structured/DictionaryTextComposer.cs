@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GAPoTNumLib.Framework.Text.Structured
+namespace GAPoTNumLib.Text.Structured
 {
     public sealed class DictionaryTextComposer : IDictionary<string, StructuredTextItem>, IStructuredTextComposer
     {

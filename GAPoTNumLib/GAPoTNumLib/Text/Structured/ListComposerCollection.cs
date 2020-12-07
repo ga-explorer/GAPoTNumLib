@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GAPoTNumLib.Framework.Text.Parametric;
+using GAPoTNumLib.Text.Parametric;
 
-namespace GAPoTNumLib.Framework.Text.Structured
+namespace GAPoTNumLib.Text.Structured
 {
     public class ListComposerCollection : IDictionary<string, ListTextComposer>, IParametricTextComposerValueSource
     {

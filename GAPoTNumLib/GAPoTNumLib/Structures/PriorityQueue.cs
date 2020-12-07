@@ -10,7 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GAPoTNumLib.Framework.Structures
+namespace GAPoTNumLib.Structures
 {
     /// <summary>
     /// Priority queue based on binary heap,

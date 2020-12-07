@@ -1,5 +1,5 @@
-﻿using GAPoTNumLib.Framework.GAPoT;
-using GAPoTNumLib.Framework.Interop.MATLAB;
+﻿using GAPoTNumLib.GAPoT;
+using GAPoTNumLib.Interop.MATLAB;
 
 namespace GAPoTNumLib.Framework
 {
@@ -22,6 +22,17 @@ namespace GAPoTNumLib.Framework
             var mv = new GaPoTNumVector();
     
             mv.AddPolarPhasors(matrixData);
+
+            return mv;
+        }
+
+        public static GaPoTNumVector RectPhasorsArrayToVector(int rowsCount, int columnsCount, int[] rowIndicesArray, int[] columnIndicesArray, double[] valuesArray)
+        {
+            var matrixData = GaNumMatlabSparseMatrixData.CreateMatrix(rowsCount, columnsCount, rowIndicesArray, columnIndicesArray, valuesArray);
+
+            var mv = new GaPoTNumVector();
+    
+            mv.AddRectPhasors(matrixData);
 
             return mv;
         }

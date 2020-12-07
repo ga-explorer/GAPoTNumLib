@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GAPoTNumLib.Framework.Text.Parametric;
+using GAPoTNumLib.Text.Parametric;
 
-namespace GAPoTNumLib.Framework.Text.Structured
+namespace GAPoTNumLib.Text.Structured
 {
     public static class StructuredTextComposerUtils
     {

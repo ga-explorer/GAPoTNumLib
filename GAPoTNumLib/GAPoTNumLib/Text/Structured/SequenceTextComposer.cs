@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GAPoTNumLib.Framework.Text.Structured
+namespace GAPoTNumLib.Text.Structured
 {
     public sealed class SequenceTextComposer : IEnumerable<string>, IStructuredTextComposer
     {

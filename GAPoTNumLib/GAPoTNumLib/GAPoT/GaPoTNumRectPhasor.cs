@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace GAPoTNumLib.Framework.GAPoT
+namespace GAPoTNumLib.GAPoT
 {
     public sealed class GaPoTNumRectPhasor
     {
@@ -42,9 +42,9 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public int Id { get; }
 
-        public double XValue { get; }
+        public double XValue { get; set; }
 
-        public double YValue { get; }
+        public double YValue { get; set; }
 
 
         internal GaPoTNumRectPhasor(int id, double x, double y)
@@ -66,6 +66,11 @@ namespace GAPoTNumLib.Framework.GAPoT
         }
 
         
+        public bool IsZero()
+        {
+            return XValue == 0 && YValue == 0;
+        }
+
         public IEnumerable<GaPoTNumVectorTerm> GetTerms()
         {
             if (XValue != 0)
@@ -102,8 +107,8 @@ namespace GAPoTNumLib.Framework.GAPoT
         
         public string ToText()
         {
-            if (XValue == 0 && YValue == 0)
-                return "0";
+            //if (XValue == 0 && YValue == 0)
+            //    return "0";
 
             var i1 = Id;
             var i2 = Id + 1;
@@ -113,8 +118,8 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public string ToLaTeX()
         {
-            if (XValue == 0 && YValue == 0)
-                return "0";
+            //if (XValue == 0 && YValue == 0)
+            //    return "0";
 
             var i1 = Id;
             var i2 = Id + 1;
@@ -124,11 +129,11 @@ namespace GAPoTNumLib.Framework.GAPoT
             var basisText1 = $"{i1},{i2}".GetLaTeXBasisName();
             var basisText2 = $"{i1}".GetLaTeXBasisName();
 
-            if (XValue == 0)
-                return $@"\left( {yValueText} \right) {basisText1} {basisText2}";
+            //if (XValue == 0)
+            //    return $@"\left( {yValueText} \right) {basisText1} {basisText2}";
 
-            if (YValue == 0)
-                return $@"{xValueText} {basisText2}";
+            //if (YValue == 0)
+            //    return $@"{xValueText} {basisText2}";
 
             return $@"\left[ {xValueText} + \left( {yValueText} \right) {basisText1} \right] {basisText2}";
         }

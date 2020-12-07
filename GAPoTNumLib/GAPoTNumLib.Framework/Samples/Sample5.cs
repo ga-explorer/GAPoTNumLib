@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using GAPoTNumLib.Framework.GAPoT;
+using GAPoTNumLib.GAPoT;
 
 namespace GAPoTNumLib.Framework.Samples
 {
@@ -56,7 +56,7 @@ namespace GAPoTNumLib.Framework.Samples
             Console.WriteLine($@"Harm total = {mvM.GetHarmTotal():G}");
             Console.WriteLine($@"Harm part = {mvM.GetHarmPart().ToLaTeX()}");
             Console.WriteLine($@"Selected part value = {mvM.GetTermValue(2, 3):G}");
-            Console.WriteLine($@"Selected part = {mvM.GetTermPart(2, 3).ToLaTeX()}");
+            Console.WriteLine($@"Selected part = {mvM.GetTerm(2, 3).ToLaTeX()}");
             Console.WriteLine();
 
             Console.WriteLine(@"Display voltage, current, and impedance of phases in LaTeX form");

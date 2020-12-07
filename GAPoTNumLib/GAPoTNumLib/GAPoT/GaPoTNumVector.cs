@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using GAPoTNumLib.Framework.Interop.MATLAB;
-using GAPoTNumLib.Framework.Text; //using CodeComposerLib.MathML.Values;
+using GAPoTNumLib.Interop.MATLAB;
+using GAPoTNumLib.Text; //using CodeComposerLib.MathML.Values;
 
-namespace GAPoTNumLib.Framework.GAPoT
+namespace GAPoTNumLib.GAPoT
 {
     public sealed class GaPoTNumVector : IReadOnlyList<double>
     {
@@ -120,7 +121,6 @@ namespace GAPoTNumLib.Framework.GAPoT
                             term1.TermId1, 
                             scalarValue
                         );
-
                     }
                 }
             }
@@ -235,9 +235,16 @@ namespace GAPoTNumLib.Framework.GAPoT
             return Norm2().IsNearZero();
         }
 
+        //public bool HasDcTerm()
+        //{
+        //    return _termsDictionary.TryGetValue(0, out var term) && 
+        //           term.Value != 0;
+        //}
 
         public GaPoTNumVector SetTerm(int id, double value)
         {
+            Debug.Assert(id > 0);
+
             if (_termsDictionary.ContainsKey(id))
                 _termsDictionary[id].Value = value;
             else
@@ -257,6 +264,8 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public GaPoTNumVector SetRectPhasor(int id, double x, double y)
         {
+            Debug.Assert(id > 0 && id % 2 == 1);
+
             SetTerm(id, x);
 
             SetTerm(id + 1, -y);
@@ -267,6 +276,8 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public GaPoTNumVector AddTerm(int id, double value)
         {
+            Debug.Assert(id > 0);
+
             if (_termsDictionary.ContainsKey(id))
                 _termsDictionary[id].Value += value;
             else
@@ -329,6 +340,8 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public GaPoTNumVector AddRectPhasor(int id, double x, double y)
         {
+            Debug.Assert(id > 0 && id % 2 == 1);
+            
             AddTerm(id, x);
 
             AddTerm(id + 1, -y);
@@ -342,6 +355,16 @@ namespace GAPoTNumLib.Framework.GAPoT
         }
 
 
+        public GaPoTNumVectorTerm GetTerm(int id)
+        {
+            Debug.Assert(id > 0);
+            
+            if (_termsDictionary.TryGetValue(id, out var term))
+                return term;
+
+            return new GaPoTNumVectorTerm(id);
+        }
+
         public GaPoTNumPolarPhasor GetPolarPhasor(int id)
         {
             return GetRectPhasor(id).ToPolarPhasor();
@@ -349,10 +372,26 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public GaPoTNumRectPhasor GetRectPhasor(int id)
         {
+            Debug.Assert(id > 0 && id % 2 == 1);
+            
             var x = this[id];
             var y = -this[id + 1];
 
             return new GaPoTNumRectPhasor(id, x, y);
+        }
+
+        public GaPoTNumVector AddRectPhasors(GaNumMatlabSparseMatrixData matlabArray)
+        {
+            var array = matlabArray.GetArray();
+
+            for (var i = 0; i < matlabArray.RowsCount; i++)
+                AddRectPhasor(
+                    i * 2 + 1, 
+                    array[i, 0],
+                    array[i, 1]
+                );
+
+            return this;
         }
 
         public GaPoTNumVector GetPartByTermIDs(params int[] termIDsList)
@@ -364,9 +403,19 @@ namespace GAPoTNumLib.Framework.GAPoT
         
         public GaPoTNumVector GetPartByTermIDsRange(int minTermId, int maxTermId)
         {
-            return new GaPoTNumVector(
-                GetTerms().Where(t => t.TermId >= minTermId && t.TermId <= maxTermId)
-            );
+            var termsList = GetTerms()
+                .Where(t => t.TermId >= minTermId && t.TermId <= maxTermId);
+
+            return new GaPoTNumVector(termsList);
+        }
+        
+        public GaPoTNumVector GetOffsetPartByTermIDsRange(int minTermId, int maxTermId)
+        {
+            var termsList = GetTerms()
+                .Where(t => t.TermId >= minTermId && t.TermId <= maxTermId)
+                .Select(t => t.OffsetTermId(1 - minTermId));
+
+            return new GaPoTNumVector(termsList);
         }
 
         public GaPoTNumVector[] GetParts(params int[] partLengthsArray)
@@ -379,6 +428,23 @@ namespace GAPoTNumLib.Framework.GAPoT
                 var termId2 = termId1 + partLengthsArray[i] - 1;
 
                 results[i] = GetPartByTermIDsRange(termId1, termId2);
+
+                termId1 = termId2 + 1;
+            }
+
+            return results;
+        }
+
+        public GaPoTNumVector[] GetOffsetParts(params int[] partLengthsArray)
+        {
+            var results = new GaPoTNumVector[partLengthsArray.Length];
+
+            var termId1 = 1;
+            for (var i = 0; i < partLengthsArray.Length; i++)
+            {
+                var termId2 = termId1 + partLengthsArray[i] - 1;
+
+                results[i] = GetOffsetPartByTermIDsRange(termId1, termId2);
 
                 termId1 = termId2 + 1;
             }
@@ -399,6 +465,11 @@ namespace GAPoTNumLib.Framework.GAPoT
             return _termsDictionary.Values;
         }
 
+        //public GaPoTNumVectorTerm GetDcTerm()
+        //{
+        //    return GetTerm(0);
+        //}
+
         public IEnumerable<GaPoTNumPolarPhasor> GeTPolarPhasors()
         {
             return GeTRectPhasors().Select(p => p.ToPolarPhasor());
@@ -406,17 +477,36 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public IEnumerable<GaPoTNumRectPhasor> GeTRectPhasors()
         {
-            var termIDsList = _termsDictionary
-                .Keys
-                .Where(id => id % 2 == 1);
+            var phasorsDict = new Dictionary<int, GaPoTNumRectPhasor>();
 
-            foreach (var id in termIDsList)
+            foreach (var term in _termsDictionary.Values)
             {
-                var x = this[id];
-                var y = -this[id + 1];
+                var id = term.TermId;
+                var x = 0.0d;
+                var y = 0.0d;
 
-                yield return new GaPoTNumRectPhasor(id, x, y);
+                if (id % 2 == 1)
+                {
+                    x = term.Value;
+                }
+                else
+                {
+                    id--;
+                    y = -term.Value;
+                }
+
+                if (phasorsDict.TryGetValue(id, out var phasor))
+                {
+                    phasor.XValue += x;
+                    phasor.YValue += y;
+                }
+                else
+                {
+                    phasorsDict.Add(id, new GaPoTNumRectPhasor(id, x, y));
+                }
             }
+
+            return phasorsDict.Values;
         }
 
 
@@ -500,12 +590,17 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public GaNumMatlabSparseMatrixData PartsTermsToMatlabArray(int rowsCount, params int[] partLengthArray)
         {
-            return GetParts(partLengthArray).TermsToMatlabArray(rowsCount);
+            return GetOffsetParts(partLengthArray).TermsToMatlabArray(rowsCount);
         }
 
         public GaNumMatlabSparseMatrixData PolarPhasorsToMatlabArray(int rowsCount)
         {
             return GeTPolarPhasors().PolarPhasorsToMatlabArray(rowsCount);
+        }
+
+        public GaNumMatlabSparseMatrixData RectPhasorsToMatlabArray(int rowsCount)
+        {
+            return GeTRectPhasors().RectPhasorsToMatlabArray(rowsCount);
         }
 
 
@@ -517,7 +612,7 @@ namespace GAPoTNumLib.Framework.GAPoT
         public string TermsToText()
         {
             var termsArray = 
-                GetTerms().ToArray();
+                GetTerms().Where(t => !t.IsZero()).ToArray();
 
             return termsArray.Length == 0
                 ? "0"
@@ -526,22 +621,36 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public string PolarPhasorsToText()
         {
-            var termsArray = 
-                GeTPolarPhasors().ToArray();
+            //var dcTerm = GetTerm(0);
 
-            return termsArray.Length == 0
-                ? "0"
-                : termsArray.Select(t => t.ToText()).Concatenate(", ", 80);
+            var termsArray = 
+                GeTPolarPhasors().Where(t => !t.IsZero()).ToArray();
+
+            //if (dcTerm.IsZero())
+                return termsArray.Length == 0
+                    ? "0"
+                    : termsArray.Select(t => t.ToText()).Concatenate(", ", 80);
+
+            //return termsArray.Length == 0
+            //    ? dcTerm.ToText()
+            //    : dcTerm.ToText() + ", " + termsArray.Select(t => t.ToText()).Concatenate(", ", 80);
         }
 
         public string RectPhasorsToText()
         {
-            var termsArray = 
-                GeTRectPhasors().ToArray();
+            //var dcTerm = GetTerm(0);
 
-            return termsArray.Length == 0
-                ? "0"
-                : termsArray.Select(t => t.ToText()).Concatenate(", ", 80);
+            var termsArray = 
+                GeTRectPhasors().Where(t => !t.IsZero()).ToArray();
+
+            //if (dcTerm.IsZero())
+                return termsArray.Length == 0
+                    ? "0"
+                    : termsArray.Select(t => t.ToText()).Concatenate(", ", 80);
+
+            //return termsArray.Length == 0
+            //    ? dcTerm.ToText()
+            //    : dcTerm.ToText() + ", " + termsArray.Select(t => t.ToText()).Concatenate(", ", 80);
         }
 
 
@@ -553,7 +662,7 @@ namespace GAPoTNumLib.Framework.GAPoT
         public string TermsToLaTeX()
         {
             var termsArray = 
-                GetTerms().ToArray();
+                GetTerms().Where(t => !t.IsZero()).ToArray();
 
             return termsArray.Length == 0
                 ? "0"
@@ -562,22 +671,36 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public string PolarPhasorsToLaTeX()
         {
-            var termsArray = 
-                GeTPolarPhasors().ToArray();
+            //var dcTerm = GetTerm(0);
 
-            return termsArray.Length == 0
-                ? "0"
-                : termsArray.Select(t => t.ToLaTeX()).Concatenate(" + ");
+            var termsArray = 
+                GeTPolarPhasors().Where(t => !t.IsZero()).ToArray();
+
+            //if (dcTerm.IsZero())
+                return termsArray.Length == 0
+                    ? "0"
+                    : termsArray.Select(t => t.ToLaTeX()).Concatenate(" + ");
+
+            //return termsArray.Length == 0
+            //    ? dcTerm.ToLaTeX()
+            //    : dcTerm.ToLaTeX() + " + " + termsArray.Select(t => t.ToLaTeX()).Concatenate(" + ");
         }
 
         public string RectPhasorsToLaTeX()
         {
-            var termsArray = 
-                GeTRectPhasors().ToArray();
+            //var dcTerm = GetTerm(0);
 
-            return termsArray.Length == 0
-                ? "0"
-                : termsArray.Select(t => t.ToLaTeX()).Concatenate(" + ");
+            var termsArray = 
+                GeTRectPhasors().Where(t => !t.IsZero()).ToArray();
+
+            //if (dcTerm.IsZero())
+                return termsArray.Length == 0
+                    ? "0"
+                    : termsArray.Select(t => t.ToLaTeX()).Concatenate(" + ");
+
+            //return termsArray.Length == 0
+            //    ? dcTerm.ToLaTeX()
+            //    : dcTerm.ToLaTeX() + " + " + termsArray.Select(t => t.ToLaTeX()).Concatenate(" + ");
         }
 
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GAPoTNumLib.Framework.Samples;
+using GAPoTNumLib.Framework.Samples.Construction;
 
 namespace GAPoTNumLib.Framework
 {
@@ -11,7 +12,7 @@ namespace GAPoTNumLib.Framework
     {
         static void Main(string[] args)
         {
-            Sample6.Execute();
+            VectorConstructionSample.Execute();
 
             Console.WriteLine();
             Console.WriteLine(@"Press any key to exit...");

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace GAPoTNumLib.Framework.Interop.MATLAB
+namespace GAPoTNumLib.Interop.MATLAB
 {
     /// <summary>
     /// Used for exchanging sparse matrix data with MATLAB
@@ -103,8 +103,15 @@ namespace GAPoTNumLib.Framework.Interop.MATLAB
 
         public GaNumMatlabSparseMatrixData SetItem(int sparseIndex, int row, int column, double value)
         {
-            Debug.Assert(row >= 1 && row <= RowsCount);
-            Debug.Assert(column >= 1 && column <= ColumnsCount);
+            Debug.Assert(
+                row >= 1 && row <= RowsCount, 
+                $"Row number {row} outside valid range (1, {RowsCount})"
+            );
+
+            Debug.Assert(
+                column >= 1 && column <= ColumnsCount, 
+                $"Column number {column} outside valid range (1, {ColumnsCount})"
+            );
 
             RowIndicesArray[sparseIndex] = row;
             ColumnIndicesArray[sparseIndex] = column;

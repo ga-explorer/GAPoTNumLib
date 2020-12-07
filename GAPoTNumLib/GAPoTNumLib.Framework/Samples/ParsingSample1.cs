@@ -1,7 +1,7 @@
 ﻿using System;
-using GAPoTNumLib.Framework.GAPoT;
-using GAPoTNumLib.Framework.Structures;
-using GAPoTNumLib.Framework.Text.Markdown;
+using GAPoTNumLib.GAPoT;
+using GAPoTNumLib.Structures;
+using GAPoTNumLib.Text.Markdown;
 
 namespace GAPoTNumLib.Framework.Samples
 {

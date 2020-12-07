@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GAPoTNumLib.Framework.Text.Linear.LineHeader
+namespace GAPoTNumLib.Text.Linear.LineHeader
 {
     public sealed class LtcIndentation : LtcLineHeader
     {

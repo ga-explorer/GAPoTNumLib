@@ -1,4 +1,4 @@
-﻿namespace GAPoTNumLib.Framework.Text.Literals
+﻿namespace GAPoTNumLib.Text.Literals
 {
     public static class HtmlLiterals
     {

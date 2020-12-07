@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GAPoTNumLib.Framework.Text.Linear;
+using GAPoTNumLib.Text.Linear;
 
-namespace GAPoTNumLib.Framework.Text.Attributes
+namespace GAPoTNumLib.Text.Attributes
 {
     /// <summary>
     /// This class is a linear text composer that can also hold a list of

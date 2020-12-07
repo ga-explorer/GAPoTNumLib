@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace GAPoTNumLib.Framework.Text.Parametric
+namespace GAPoTNumLib.Text.Parametric
 {
     public static class ParametricUtils
     {

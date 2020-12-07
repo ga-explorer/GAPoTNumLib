@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace GAPoTNumLib.Framework.Text.Markdown.Tables
+namespace GAPoTNumLib.Text.Markdown.Tables
 {
     public sealed class MarkdownTable
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace GAPoTNumLib.Framework.GAPoT
+namespace GAPoTNumLib.GAPoT
 {
     public sealed class GaPoTNumVectorTerm
     {
@@ -48,6 +48,11 @@ namespace GAPoTNumLib.Framework.GAPoT
             Value = value;
         }
 
+        
+        public bool IsZero()
+        {
+            return Value == 0;
+        }
 
         public double Norm()
         {
@@ -61,16 +66,16 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public string ToText()
         {
-            if (Value == 0)
-                return "0";
+            //if (Value == 0)
+            //    return "0";
 
             return $"{Value:G} <{TermId}>";
         }
 
         public string ToLaTeX()
         {
-            if (Value == 0)
-                return "0";
+            //if (Value == 0)
+            //    return "0";
 
             var valueText = Value.GetLaTeXNumber();
             var basisText = TermId.ToString().GetLaTeXBasisName();

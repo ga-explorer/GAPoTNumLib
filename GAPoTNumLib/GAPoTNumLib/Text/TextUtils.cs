@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GAPoTNumLib.Framework.Text.Structured;
+using GAPoTNumLib.Text.Structured;
 
-namespace GAPoTNumLib.Framework.Text
+namespace GAPoTNumLib.Text
 {
     public static class TextUtils
     {

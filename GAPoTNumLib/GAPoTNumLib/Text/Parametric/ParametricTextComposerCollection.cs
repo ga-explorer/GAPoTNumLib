@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace GAPoTNumLib.Framework.Text.Parametric
+namespace GAPoTNumLib.Text.Parametric
 {
     public class ParametricTextComposerCollection : IDictionary<string, ParametricTextComposer>
     {

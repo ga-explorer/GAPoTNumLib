@@ -1,4 +1,4 @@
-﻿namespace GAPoTNumLib.Framework.Text.Columns
+﻿namespace GAPoTNumLib.Text.Columns
 {
     public enum TextRowAlignment
     {

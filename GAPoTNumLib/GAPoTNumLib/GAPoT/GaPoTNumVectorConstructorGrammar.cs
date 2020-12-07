@@ -2,19 +2,19 @@
 using Irony.Interpreter.Evaluator;
 using Irony.Parsing;
 
-namespace GAPoTNumLib.Framework.GAPoT
+namespace GAPoTNumLib.GAPoT
 {
     public class GaPoTNumVectorConstructorGrammar : InterpretedLanguageGrammar
     {
         //Examples:
-        //Single Phase GAPoT vector using terms form:
-        //  -1.3<1>, 1.2<3>, -4.6<5>
+        //GAPoT vector using terms form:
+        //  -1.3<0>, 1.2<3>, -4.6<5>
         //
-        //Single Phase GAPoT vector using polar form:
-        //  p(233.92, −1.57) <1,2>, p(120, 0) <3,4>
+        //GAPoT vector using polar form:
+        //  -1.3<0>, p(233.92, −90) <1,2>, p(120, 0) <3,4>
         //
-        //Single Phase GAPoT vector using rectangular form:
-        //  r(10, 20) <1,2>, r(30, 0) <3,4>
+        //GAPoT vector using rectangular form:
+        //  -1.3<0>, r(10, 20) <1,2>, r(30, 0) <3,4>
         //
         //All the above can be mixed together
         //
@@ -94,24 +94,5 @@ namespace GAPoTNumLib.Framework.GAPoT
         {
             return new ExpressionEvaluatorRuntime(language);
         }
-
-        //#region Running in Grammar Explorer
-        //private static GaPoTMultivectorFactory _evaluator;
-        //public override string RunSample(RunSampleArgs args)
-        //{
-        //    if (_evaluator == null)
-        //    {
-        //        _evaluator = new GaPoTMultivectorFactory(this);
-        //        _evaluator.Globals.Add("null", _evaluator.Runtime.NoneValue);
-        //        _evaluator.Globals.Add("true", true);
-        //        _evaluator.Globals.Add("false", false);
-
-        //    }
-        //    _evaluator.ClearOutput();
-        //    //for (int i = 0; i < 1000; i++)  //for perf measurements, to execute 1000 times
-        //    _evaluator.Evaluate(args.ParsedSample);
-        //    return _evaluator.GetOutput();
-        //}
-        //#endregion
     }
 }

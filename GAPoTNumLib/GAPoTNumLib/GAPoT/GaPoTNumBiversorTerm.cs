@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace GAPoTNumLib.Framework.GAPoT
+namespace GAPoTNumLib.GAPoT
 {
     public sealed class GaPoTNumBiversorTerm
     {
@@ -45,12 +45,12 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         internal GaPoTNumBiversorTerm(int id1, int id2, double value)
         {
-            Debug.Assert(id1 > 0 && id2 > 0);
+            Debug.Assert(id1 == id2 || (id1 > 0 && id2 > 0));
 
             if (id1 == id2)
             {
-                TermId1 = 1;
-                TermId2 = 1;
+                TermId1 = 0;
+                TermId2 = 0;
                 Value = value;
             }
             else if (id1 < id2)
@@ -95,8 +95,8 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public string ToText()
         {
-            if (Value == 0)
-                return "0";
+            //if (Value == 0)
+            //    return "0";
 
             return IsScalar
                 ? $"{Value:G} <>"
@@ -105,8 +105,8 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public string ToLaTeX()
         {
-            if (Value.IsNearZero())
-                return "0";
+            //if (Value.IsNearZero())
+            //    return "0";
 
             var valueText = Value.GetLaTeXNumber();
             var basisText = $"{TermId1},{TermId2}".GetLaTeXBasisName();

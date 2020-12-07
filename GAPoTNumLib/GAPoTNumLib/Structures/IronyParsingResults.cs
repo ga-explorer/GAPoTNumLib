@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GAPoTNumLib.Framework.Text;
-using GAPoTNumLib.Framework.Text.Linear;
-using GAPoTNumLib.Framework.Text.Markdown;
-using GAPoTNumLib.Framework.Text.Markdown.Tables;
+using GAPoTNumLib.Text;
+using GAPoTNumLib.Text.Linear;
+using GAPoTNumLib.Text.Markdown;
+using GAPoTNumLib.Text.Markdown.Tables;
 using Irony;
 using Irony.Parsing;
 
-namespace GAPoTNumLib.Framework.Structures
+namespace GAPoTNumLib.Structures
 {
     public sealed class IronyParsingResults
     {

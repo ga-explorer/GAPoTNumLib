@@ -2,7 +2,7 @@
 using Irony.Interpreter.Evaluator;
 using Irony.Parsing;
 
-namespace GAPoTNumLib.Framework.GAPoT
+namespace GAPoTNumLib.GAPoT
 {
     public class GaPoTNumBiversorConstructorGrammar : InterpretedLanguageGrammar
     {

@@ -1,4 +1,4 @@
-%Create a sparse MATLAB array from a GAPoT vector polar phasors
+% Create a sparse MATLAB array from a GAPoT vector' polar phasors
 function sparseArray = gapotVectorToPolarPhasorsArray(mv, rowsCount)
     sparseMatrixData = mv.PolarPhasorsToMatlabArray(rowsCount);
     

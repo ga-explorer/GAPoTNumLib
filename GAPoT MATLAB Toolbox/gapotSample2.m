@@ -1,9 +1,9 @@
-%Always begin with this
+% Always begin with this
 gapotInit;
 
 clc;
 
-%Create voltage and current vectors
+% Create voltage and current vectors
 aU = [
     200 / sqrt(3), 0;
     100 / sqrt(3), 60 * pi / 180
@@ -22,9 +22,9 @@ fprintf("Display the polar phasors of GAPoT vectors\n");
 gapotDisplayPhasors(mvU)
 gapotDisplayPhasors(mvI)
 
-%Compute the single-phase power multivector
+% Compute the single-phase power multivector
 mvM = gapotPower(mvU, mvI);
-%Or use this: mvM = gapotGp(mvU, mvI);
+% Or use this: mvM = gapotGp(mvU, mvI);
 
 fprintf("Display all terms of the GAPoT power bivector\n");
 gapotDisplayTerms(mvM)
@@ -56,7 +56,7 @@ disp(gapotGetHarmTotal(mvM))
 fprintf("Selected part of power bivector\n");
 gapotDisplayTerms(gapotGetTermPart(mvM, 2, 3))
 
-%Compute the squared norm of voltage, current, power, and impedance multivectors
+% Compute the squared norm of voltage, current, power, and impedance multivectors
 normU = gapotNorm(mvU);
 normI = gapotNorm(mvI);
 normM = gapotNorm(mvM);
@@ -67,12 +67,12 @@ disp(normI);
 disp(normM);
 disp(normU * normI - normM);
 
-%Get per-phase voltage and current parts; here we have two phases each
-%containing two terms
+% Get per-phase voltage and current parts; here we have two phases each
+% containing two terms
 mvUParts = gapotGetParts(mvU, [2, 2]);
 mvIParts = gapotGetParts(mvI, [2, 2]);
 
-%Compute per-phase impedance bivectors
+% Compute per-phase impedance bivectors
 mvZParts = gapotImpedance(mvU, mvI, [2, 2]);
 
 fprintf("Display per-phase voltage, current, and impedance multivectors\n");

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace GAPoTNumLib.Framework.GAPoT
+namespace GAPoTNumLib.GAPoT
 {
     public sealed class GaPoTNumPolarPhasor
     {
-        //TODO: Initialize and Display everything in degrees
-
         public static GaPoTNumPolarPhasor operator -(GaPoTNumPolarPhasor p)
         {
             return new GaPoTNumPolarPhasor(p.Id, -p.Magnitude, p.Phase);
@@ -37,6 +35,9 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public double Phase { get; }
 
+        public double PhaseInDegrees 
+            => Phase.RadiansToDegrees();
+
 
         internal GaPoTNumPolarPhasor(int id, double magnitude, double phase)
         {
@@ -56,6 +57,11 @@ namespace GAPoTNumLib.Framework.GAPoT
             Phase = 0;
         }
 
+
+        public bool IsZero()
+        {
+            return Magnitude == 0;
+        }
 
         public IEnumerable<GaPoTNumVectorTerm> GetTerms()
         {
@@ -85,30 +91,30 @@ namespace GAPoTNumLib.Framework.GAPoT
 
         public string ToText()
         {
-            if (Magnitude == 0)
-                return "0";
+            //if (Magnitude == 0)
+            //    return "0";
 
             var i1 = Id;
             var i2 = Id + 1;
 
-            return $"p({Magnitude:G}, {Phase:G}) <{i1},{i2}>";
+            return $"p({Magnitude:G}, {PhaseInDegrees:G}) <{i1},{i2}>";
         }
 
         public string ToLaTeX()
         {
-            if (Magnitude == 0)
-                return "0";
+            //if (Magnitude == 0)
+            //    return "0";
 
             var i1 = Id;
             var i2 = Id + 1;
 
             var magnitudeText = Magnitude.GetLaTeXNumber();
-            var phaseText = Phase.GetLaTeXNumber();
+            var phaseText = Phase.GetLaTeXAngleInDegrees();
             var basisText1 = $"{i1},{i2}".GetLaTeXBasisName();
             var basisText2 = $"{i1}".GetLaTeXBasisName();
 
-            if (Phase == 0)
-                return $@"{magnitudeText} {basisText2}";
+            //if (Phase == 0)
+            //    return $@"{magnitudeText} {basisText2}";
 
             return $@"{magnitudeText} e^{{ {phaseText} {basisText1} }} {basisText2}";
         }
