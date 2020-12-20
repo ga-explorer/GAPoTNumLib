@@ -39,6 +39,35 @@ namespace GAPoTNumLib.GAPoT
             );
         }
 
+        public static GaPoTNumRectPhasor operator *(GaPoTNumRectPhasor p, double s)
+        {
+            return new GaPoTNumRectPhasor(
+                p.Id,
+                s * p.XValue,
+                s * p.YValue
+            );
+        }
+
+        public static GaPoTNumRectPhasor operator *(double s, GaPoTNumRectPhasor p)
+        {
+            return new GaPoTNumRectPhasor(
+                p.Id,
+                s * p.XValue,
+                s * p.YValue
+            );
+        }
+
+        public static GaPoTNumRectPhasor operator /(GaPoTNumRectPhasor p, double s)
+        {
+            s = 1.0d / s;
+
+            return new GaPoTNumRectPhasor(
+                p.Id,
+                s * p.XValue,
+                s * p.YValue
+            );
+        }
+
 
         public int Id { get; }
 

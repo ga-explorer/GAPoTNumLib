@@ -28,6 +28,24 @@ namespace GAPoTNumLib.GAPoT
             return rp.ToPolarPhasor();
         }
 
+        public static GaPoTNumPolarPhasor operator *(GaPoTNumPolarPhasor p, double s)
+        {
+            return new GaPoTNumPolarPhasor(p.Id, s * p.Magnitude, p.Phase);
+        }
+
+        public static GaPoTNumPolarPhasor operator *(double s, GaPoTNumPolarPhasor p)
+        {
+            return new GaPoTNumPolarPhasor(p.Id, s * p.Magnitude, p.Phase);
+        }
+
+        public static GaPoTNumPolarPhasor operator /(GaPoTNumPolarPhasor p, double s)
+        {
+            s = 1.0d / s;
+
+            return new GaPoTNumPolarPhasor(p.Id, s * p.Magnitude, p.Phase);
+        }
+
+
 
         public int Id { get; }
 

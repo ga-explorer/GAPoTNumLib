@@ -26,6 +26,23 @@ namespace GAPoTNumLib.GAPoT
             return new GaPoTNumBiversorTerm(t1.TermId1, t1.TermId2, t1.Value - t2.Value);
         }
 
+        public static GaPoTNumBiversorTerm operator *(GaPoTNumBiversorTerm t, double s)
+        {
+            return new GaPoTNumBiversorTerm(t.TermId1, t.TermId2, s * t.Value);
+        }
+
+        public static GaPoTNumBiversorTerm operator *(double s, GaPoTNumBiversorTerm t)
+        {
+            return new GaPoTNumBiversorTerm(t.TermId1, t.TermId2, s * t.Value);
+        }
+
+        public static GaPoTNumBiversorTerm operator /(GaPoTNumBiversorTerm t, double s)
+        {
+            s = 1.0d / s;
+
+            return new GaPoTNumBiversorTerm(t.TermId1, t.TermId2, s * t.Value);
+        }
+
 
         public int TermId1 { get; }
 

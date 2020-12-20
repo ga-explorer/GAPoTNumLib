@@ -198,6 +198,21 @@ namespace GAPoTNumLib.GAPoT
             return result;
         }
 
+        public static GaPoTNumVector operator /(GaPoTNumVector v, double s)
+        {
+            s = 1.0d / s;
+
+            var result = new GaPoTNumVector();
+
+            foreach (var term in v._termsDictionary.Values)
+                result.AddTerm(
+                    term.TermId,
+                    term.Value * s
+                );
+
+            return result;
+        }
+
 
         private readonly SortedDictionary<int, GaPoTNumVectorTerm> _termsDictionary
             = new SortedDictionary<int, GaPoTNumVectorTerm>();
@@ -533,6 +548,11 @@ namespace GAPoTNumLib.GAPoT
         public GaPoTNumVector Negative()
         {
             return -this;
+        }
+
+        public GaPoTNumVector ScaleBy(double s)
+        {
+            return s * this;
         }
 
         public GaPoTNumVector Reverse()

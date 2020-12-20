@@ -36,6 +36,29 @@ namespace GAPoTNumLib.GAPoT
             return biversor;
         }
 
+        public static GaPoTNumBiversor operator *(GaPoTNumBiversor v, double s)
+        {
+            return new GaPoTNumBiversor(
+                v._termsDictionary.Values.Select(t => s * t)
+            );
+        }
+
+        public static GaPoTNumBiversor operator *(double s, GaPoTNumBiversor v)
+        {
+            return new GaPoTNumBiversor(
+                v._termsDictionary.Values.Select(t => s * t)
+            );
+        }
+
+        public static GaPoTNumBiversor operator /(GaPoTNumBiversor v, double s)
+        {
+            s = 1.0d / s;
+
+            return new GaPoTNumBiversor(
+                v._termsDictionary.Values.Select(t => s * t)
+            );
+        }
+
 
         private readonly Dictionary2Keys<int, GaPoTNumBiversorTerm> _termsDictionary
             = new Dictionary2Keys<int, GaPoTNumBiversorTerm>();
@@ -232,6 +255,26 @@ namespace GAPoTNumLib.GAPoT
                 else
                     result.AddTerm(-pair.Value);
             }
+
+            return result;
+        }
+
+        public GaPoTNumBiversor Negative()
+        {
+            var result = new GaPoTNumBiversor();
+
+            foreach (var pair in _termsDictionary) 
+                result.AddTerm(-pair.Value);
+
+            return result;
+        }
+
+        public GaPoTNumBiversor ScaleBy(double s)
+        {
+            var result = new GaPoTNumBiversor();
+
+            foreach (var pair in _termsDictionary) 
+                result.AddTerm(s * pair.Value);
 
             return result;
         }

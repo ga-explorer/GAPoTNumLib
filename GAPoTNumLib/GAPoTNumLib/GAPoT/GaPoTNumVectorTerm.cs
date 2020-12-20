@@ -26,6 +26,23 @@ namespace GAPoTNumLib.GAPoT
             return new GaPoTNumVectorTerm(t1.TermId, t1.Value - t2.Value);
         }
 
+        public static GaPoTNumVectorTerm operator *(GaPoTNumVectorTerm t, double s)
+        {
+            return new GaPoTNumVectorTerm(t.TermId, s * t.Value);
+        }
+
+        public static GaPoTNumVectorTerm operator *(double s, GaPoTNumVectorTerm t)
+        {
+            return new GaPoTNumVectorTerm(t.TermId, s * t.Value);
+        }
+
+        public static GaPoTNumVectorTerm operator /(GaPoTNumVectorTerm t, double s)
+        {
+            s = 1.0d / s;
+
+            return new GaPoTNumVectorTerm(t.TermId, s * t.Value);
+        }
+
 
         public int TermId { get; }
 
