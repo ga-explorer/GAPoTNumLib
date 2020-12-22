@@ -81,6 +81,11 @@ namespace GAPoTNumLib.GAPoT
             return Value * Value;
         }
 
+        public GaPoTNumMultivectorTerm ToMultivectorTerm()
+        {
+            return new GaPoTNumMultivectorTerm(1 << (TermId - 1) , Value);
+        }
+
         public string ToText()
         {
             //if (Value == 0)

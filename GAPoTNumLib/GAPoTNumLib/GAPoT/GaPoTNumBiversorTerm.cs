@@ -110,6 +110,19 @@ namespace GAPoTNumLib.GAPoT
         }
 
 
+        public GaPoTNumMultivectorTerm ToMultivectorTerm()
+        {
+            if (TermId1 == TermId2)
+                return new GaPoTNumMultivectorTerm(0, Value);
+
+            var idsPattern = (1 << (TermId1 - 1)) + (1 << (TermId2 - 1));
+
+            return new GaPoTNumMultivectorTerm(
+                idsPattern,
+                Value
+            );
+        }
+
         public string ToText()
         {
             //if (Value == 0)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using GAPoTNumLib.Interop.MATLAB;
@@ -375,7 +376,7 @@ namespace GAPoTNumLib.GAPoT
             Debug.Assert(id > 0);
             
             if (_termsDictionary.TryGetValue(id, out var term))
-                return term;
+                return new GaPoTNumVectorTerm(term.TermId, term.Value);
 
             return new GaPoTNumVectorTerm(id);
         }
@@ -418,17 +419,17 @@ namespace GAPoTNumLib.GAPoT
         
         public GaPoTNumVector GetPartByTermIDsRange(int minTermId, int maxTermId)
         {
-            var termsList = GetTerms()
-                .Where(t => t.TermId >= minTermId && t.TermId <= maxTermId);
-
-            return new GaPoTNumVector(termsList);
+            return new GaPoTNumVector(
+                GetTerms().Where(t => t.TermId >= minTermId && t.TermId <= maxTermId)
+            );
         }
         
         public GaPoTNumVector GetOffsetPartByTermIDsRange(int minTermId, int maxTermId)
         {
-            var termsList = GetTerms()
-                .Where(t => t.TermId >= minTermId && t.TermId <= maxTermId)
-                .Select(t => t.OffsetTermId(1 - minTermId));
+            var termsList = 
+                GetTerms()
+                    .Where(t => t.TermId >= minTermId && t.TermId <= maxTermId)
+                    .Select(t => t.OffsetTermId(1 - minTermId));
 
             return new GaPoTNumVector(termsList);
         }
@@ -525,6 +526,39 @@ namespace GAPoTNumLib.GAPoT
         }
 
 
+        public double DotProduct(GaPoTNumVector v)
+        {
+            var result = 0.0d;
+
+            foreach (var term1 in _termsDictionary.Values)
+            {
+                if (v._termsDictionary.TryGetValue(term1.TermId, out var term2)) 
+                    result += term1.Value * term2.Value;
+            }
+
+            return result;
+        }
+
+        public double GetAngle(GaPoTNumVector v)
+        {
+            return Math.Acos(DotProduct(v) / Math.Sqrt(Norm2() * v.Norm2()));
+        }
+
+        public GaPoTNumMultivector Op(GaPoTNumVector v)
+        {
+            return ToMultivector().Op(v.ToMultivector());
+        }
+        
+        public GaPoTNumMultivector Op(GaPoTNumMultivector v)
+        {
+            return ToMultivector().Op(v);
+        }
+        
+        public GaPoTNumMultivector Gp(GaPoTNumMultivector v)
+        {
+            return ToMultivector().Gp(v);
+        }
+        
         public GaPoTNumBiversor Gp(GaPoTNumVector v)
         {
             return this * v;
@@ -558,6 +592,51 @@ namespace GAPoTNumLib.GAPoT
         public GaPoTNumVector Reverse()
         {
             return this;
+        }
+
+        public GaPoTNumMultivector GetRotorToVector(GaPoTNumVector v2)
+        {
+            var invNorm1 = 1.0d / Norm();
+            var invNorm2 = 1.0d / v2.Norm();
+            
+            var rotationAngle = Math.Acos(DotProduct(v2) * invNorm1 * invNorm2) / 2;
+            var rotationBlade = Op(v2);
+
+            var rotationBladeInvNorm = 
+                1.0d / Math.Sqrt(Math.Abs(rotationBlade.Gp(rotationBlade).GetTermValue(0)));
+
+            //var unitBlade = rotationBlade.ScaleBy(rotationBladeInvNorm);
+
+            //var unitBladeNorm = unitBlade.Gp(unitBlade).TermsToText();
+            
+            var rotor= Math.Cos(rotationAngle) - (rotationBladeInvNorm * Math.Sin(rotationAngle)) * rotationBlade;
+            
+            //Normalize rotor
+            //var invRotorNorm = 1.0d / Math.Sqrt(rotor.Gp(rotor.Reverse()).GetTermValue(0));
+            
+            return rotor;
+        }
+        
+        public GaPoTNumVector ApplyRotor(GaPoTNumMultivector rotor)
+        {
+            var r1 = rotor;
+            var r2 = rotor.Reverse();
+            var v = ToMultivector();
+
+            var mv = r1.Gp(v).Gp(r2);
+
+            return mv.GetVectorPart();
+        }
+
+        public GaPoTNumVector ApplyRotor(GaPoTNumBiversor rotor)
+        {
+            var r1 = rotor.ToMultivector();
+            var r2 = rotor.Reverse().ToMultivector();
+            var v = ToMultivector();
+
+            var mv = r1.Gp(v).Gp(r2);
+
+            return mv.GetVectorPart();
         }
 
         public double Norm()
@@ -621,6 +700,14 @@ namespace GAPoTNumLib.GAPoT
         public GaNumMatlabSparseMatrixData RectPhasorsToMatlabArray(int rowsCount)
         {
             return GeTRectPhasors().RectPhasorsToMatlabArray(rowsCount);
+        }
+
+
+        public GaPoTNumMultivector ToMultivector()
+        {
+            return new GaPoTNumMultivector(
+                GetTerms().Select(t => t.ToMultivectorTerm())
+            );
         }
 
 

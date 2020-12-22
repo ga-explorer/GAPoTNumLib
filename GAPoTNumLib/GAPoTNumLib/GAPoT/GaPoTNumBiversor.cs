@@ -153,6 +153,7 @@ namespace GAPoTNumLib.GAPoT
             return new GaPoTNumBiversorTerm(id1, id2, value);
         }
 
+
         public double GetActiveTotal()
         {
             return _termsDictionary
@@ -336,6 +337,13 @@ namespace GAPoTNumLib.GAPoT
             return GetTerms().TermsToMatlabArray(rowsCount);
         }
 
+
+        public GaPoTNumMultivector ToMultivector()
+        {
+            return new GaPoTNumMultivector(
+                GetTerms().Select(t => t.ToMultivectorTerm())
+            );
+        }
 
         public string ToText()
         {

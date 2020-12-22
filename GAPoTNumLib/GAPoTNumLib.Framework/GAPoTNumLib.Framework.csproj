@@ -86,6 +86,8 @@
     <Compile Include="Samples\Sample4.cs" />
     <Compile Include="Samples\Sample5.cs" />
     <Compile Include="Samples\Sample6.cs" />
+    <Compile Include="Samples\Sample7.cs" />
+    <Compile Include="Samples\SequentialRotationSample.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -86,6 +86,130 @@ namespace GAPoTNumLib.GAPoT
         }
 
 
+        /// <summary>
+        /// Compute if the Euclidean Geometric Product of two basis blades is -1.
+        /// This method is slow but can be used for GAs with dimension more than 16
+        /// </summary>
+        /// <param name="id1"></param>
+        /// <param name="id2"></param>
+        /// <returns></returns>
+        public static bool ComputeIsNegativeEGp(int id1, int id2)
+        {
+            if (id1 == 0 || id2 == 0) return false;
+
+            var flag = false;
+            var id = id1;
+
+            //Find largest 1-bit of ID1 and create a bit mask
+            var initMask1 = 1;
+            while (initMask1 <= id1)
+                initMask1 <<= 1;
+
+            initMask1 >>= 1;
+
+            var mask2 = 1;
+            while (mask2 <= id2)
+            {
+                //If the current bit in ID2 is one:
+                if ((id2 & mask2) != 0)
+                {
+                    //Count number of swaps, each new swap inverts the final sign
+                    var mask1 = initMask1;
+
+                    while (mask1 > mask2)
+                    {
+                        if ((id & mask1) != 0)
+                            flag = !flag;
+
+                        mask1 >>= 1;
+                    }
+                }
+
+                //Invert the corresponding bit in ID1
+                id = id ^ mask2;
+
+                mask2 <<= 1;
+            }
+
+            return flag;
+        }
+        
+        /// <summary>
+        /// True if the outer product of the given euclidean basis blades is non-zero
+        /// </summary>
+        /// <param name="id1"></param>
+        /// <param name="id2"></param>
+        /// <returns></returns>
+        public static bool IsNonZeroOp(int id1, int id2)
+        {
+            return (id1 & id2) == 0;
+        }
+
+        /// <summary>
+        /// True if the scalar product of the given euclidean basis blades is non-zero
+        /// </summary>
+        /// <param name="id1"></param>
+        /// <param name="id2"></param>
+        /// <returns></returns>
+        public static bool IsNonZeroESp(int id1, int id2)
+        {
+            return id1 == id2;
+        }
+
+        /// <summary>
+        /// True if the left contraction product of the given euclidean basis blades is non-zero
+        /// </summary>
+        /// <param name="id1"></param>
+        /// <param name="id2"></param>
+        /// <returns></returns>
+        public static bool IsNonZeroELcp(int id1, int id2)
+        {
+            return (id1 & ~id2) == 0;
+        }
+
+        public static int GetBasisBladeGrade(this int idsPattern)
+        {
+            var grade = 0;
+            while (idsPattern > 0)
+            {
+                if ((idsPattern & 1) != 0)
+                    grade++;
+
+                idsPattern >>= 1;
+            }
+
+            return grade;
+        }
+        
+        /// <summary>
+        /// Test if the reverse of a basis blade with a given grade is -1 the original basis blade
+        /// Sign Pattern: ++--
+        /// </summary>
+        /// <param name="grade"></param>
+        /// <returns></returns>
+        public static bool GradeHasNegativeReverse(this int grade)
+        {
+            return grade % 4 > 1;
+
+            //return ((grade * (grade - 1)) & 2) != 0;
+        }
+
+        /// <summary>
+        /// Test if the reverse of a basis blade with a given grade is -1 the original basis blade
+        /// Sign Pattern: ++--
+        /// </summary>
+        /// <param name="idsPattern"></param>
+        /// <returns></returns>
+        public static bool BasisBladeHasNegativeReverse(this int idsPattern)
+        {
+            var grade = idsPattern.GetBasisBladeGrade();
+            
+            return grade % 4 > 1;
+
+            //return ((grade * (grade - 1)) & 2) != 0;
+        }
+
+
         private static GaPoTNumVector GaPoTNumParseVector(IronyParsingResults parsingResults, ParseTreeNode rootNode)
         {
             if (rootNode.ToString() != "spVector")
@@ -276,6 +400,27 @@ namespace GAPoTNumLib.GAPoT
         }
 
 
+        public static GaPoTNumMultivector OuterProduct(params GaPoTNumVector[] vectorsList)
+        {
+            return vectorsList
+                .Skip(1)
+                .Aggregate(
+                    vectorsList[0].ToMultivector(), 
+                    (current, mv) => current.Op(mv.ToMultivector())
+                );
+        }
+
+        public static GaPoTNumMultivector OuterProduct(params GaPoTNumMultivector[] multivectorsList)
+        {
+            return multivectorsList
+                .Skip(1)
+                .Aggregate(
+                    multivectorsList[0], 
+                    (current, mv) => current.Op(mv)
+                );
+        }
+
+
         public static GaNumMatlabSparseMatrixData PolarPhasorsToMatlabArray(this IEnumerable<GaPoTNumPolarPhasor> phasorsList, int rowsCount)
         {
             var termsArray = 
@@ -328,6 +473,21 @@ namespace GAPoTNumLib.GAPoT
             }
 
             return result;
+        }
+
+        public static GaPoTNumVector TermsToVector(this IEnumerable<GaPoTNumVectorTerm> termsList)
+        {
+            return new GaPoTNumVector(termsList);
+        }
+
+        public static GaPoTNumBiversor TermsToBiversor(this IEnumerable<GaPoTNumBiversorTerm> termsList)
+        {
+            return new GaPoTNumBiversor(termsList);
+        }
+
+        public static GaPoTNumMultivector TermsToMultivector(this IEnumerable<GaPoTNumMultivectorTerm> termsList)
+        {
+            return new GaPoTNumMultivector(termsList);
         }
 
         public static GaNumMatlabSparseMatrixData TermsToMatlabArray(this IEnumerable<GaPoTNumVectorTerm> termsList, int rowsCount)

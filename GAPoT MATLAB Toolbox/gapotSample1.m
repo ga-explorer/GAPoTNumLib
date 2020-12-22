@@ -16,6 +16,12 @@ mv1 = gapotTermsArrayToVector([
 ]);
 gapotDisplayPhasors(mv1)
 
+% Scale vector by given number
+disp('Scale vector by given number')
+mv1s = mv1 * 3;
+
+gapotDisplayPhasors(mv1s)
+
 % Create GAPoT vector using MATLAB array of polar phasors
 disp('Create GAPoT vector using MATLAB array of polar phasors');
 mv2 = gapotPolarPhasorsArrayToVector([
@@ -66,8 +72,8 @@ a1 = full( gapotVectorToTermsArray(mv3, 4) )
 disp('Convert GAPoT vector polar phasors to MATLAB array')
 a2 = full( gapotVectorToPolarPhasorsArray(mv3, 2) )
 
-% Compute power bivector
-disp('Compute power bivector')
+% Compute power biversor
+disp('Compute power biversor')
 mvM = gapotGp(mv1, mv2);
 
 gapotDisplayTerms(mvM)
@@ -77,3 +83,8 @@ disp('Convert GAPoT bivector terms into MATLAB array');
 a3 = full( gapotBiversorToTermsArray(mvM, 5) )
 
 
+% Scale biversor by given number
+disp('Scale biversor by given number')
+mvP = mvM * 3;
+
+gapotDisplayTerms(mvP)
