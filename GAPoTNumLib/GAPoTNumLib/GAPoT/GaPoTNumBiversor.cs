@@ -337,7 +337,6 @@ namespace GAPoTNumLib.GAPoT
             return GetTerms().TermsToMatlabArray(rowsCount);
         }
 
-
         public GaPoTNumMultivector ToMultivector()
         {
             return new GaPoTNumMultivector(

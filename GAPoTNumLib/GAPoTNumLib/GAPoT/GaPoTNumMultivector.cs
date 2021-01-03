@@ -8,6 +8,20 @@ namespace GAPoTNumLib.GAPoT
 {
     public sealed class GaPoTNumMultivector
     {
+        public static GaPoTNumMultivector CreateZero()
+        {
+            return new GaPoTNumMultivector();
+        }
+        
+        public static GaPoTNumMultivector CreateOne()
+        {
+            return new GaPoTNumMultivector(new []
+            {
+                new GaPoTNumMultivectorTerm(0, 1.0d)
+            });
+        }
+        
+        
         public static GaPoTNumMultivector operator -(GaPoTNumMultivector v)
         {
             var result = new GaPoTNumMultivector();
@@ -288,6 +302,22 @@ namespace GAPoTNumLib.GAPoT
             );
         }
 
+        public GaPoTNumBiversor GetBiversorPart()
+        {
+            var biversor = new GaPoTNumBiversor();
+
+            var scalarValue = GetTermValue(0);
+
+            if (scalarValue != 0.0d)
+                biversor.AddTerm(new GaPoTNumBiversorTerm(scalarValue));
+
+            biversor.AddTerms(
+                GetTermsOfGrade(2).Select(t => t.ToBiversorTerm())
+            );
+
+            return biversor;
+        }
+
 
         public GaPoTNumMultivector Op(GaPoTNumMultivector mv2)
         {
@@ -383,6 +413,15 @@ namespace GAPoTNumLib.GAPoT
         public GaPoTNumMultivector ScaleBy(double s)
         {
             return s * this;
+        }
+
+        public GaPoTNumMultivector MapScalars(Func<double, double> mappingFunc)
+        {
+            return new GaPoTNumMultivector(
+                _termsDictionary.Values.Select(
+                    t => new GaPoTNumMultivectorTerm(t.IDsPattern, mappingFunc(t.Value))
+                )
+            );
         }
 
         public GaPoTNumMultivector Reverse()

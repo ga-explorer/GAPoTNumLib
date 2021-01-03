@@ -420,6 +420,29 @@ namespace GAPoTNumLib.GAPoT
                 );
         }
 
+        public static GaPoTNumVector GetProjectionOnBlade(this GaPoTNumVector v, GaPoTNumMultivector blade)
+        {
+            return v.ToMultivector().Lcp(blade).Lcp(blade.Inverse()).GetVectorPart();
+        }
+        
+        public static IEnumerable<GaPoTNumVector> ApplyGramSchmidt(GaPoTNumVector[] vectorsArray)
+        {
+            var v1 = vectorsArray[0];
+            yield return (v1 / v1.Norm());
+            
+            var mv1 = vectorsArray[0].ToMultivector();
+            
+            for (var i = 1; i < vectorsArray.Length; i++)
+            {
+                var mv2 = mv1.Op(vectorsArray[i]);
+                
+                var orthogonalVector = mv1.Reverse().Gp(mv2).GetVectorPart();
+                
+                yield return (orthogonalVector / orthogonalVector.Norm());
+                
+                mv1 = mv2;
+            }
+        }
 
         public static GaNumMatlabSparseMatrixData PolarPhasorsToMatlabArray(this IEnumerable<GaPoTNumPolarPhasor> phasorsList, int rowsCount)
         {

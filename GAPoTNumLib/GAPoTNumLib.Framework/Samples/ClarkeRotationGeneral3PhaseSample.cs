@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using GAPoTNumLib.GAPoT;
 
 namespace GAPoTNumLib.Framework.Samples
 {
-    public static class SequentialRotationSample
+    public static class ClarkeRotationGeneral3PhaseSample
     {
         public static void Execute()
         {
@@ -27,10 +28,24 @@ namespace GAPoTNumLib.Framework.Samples
             Console.WriteLine($@"inverse(u1234) = {u1234.Inverse().TermsToText()}");
             Console.WriteLine();
             
-            //Define basis vectors after rotation
-            var c1 = "1<1>, -1<4>".GaPoTNumParseVector() / Math.Sqrt(2);
-            var c2 = "-1<1>, 2<2>, -1<4>".GaPoTNumParseVector() / Math.Sqrt(6);
-            var c3 = "-1<1>, -1<2>, 3<3>, -1<4>".GaPoTNumParseVector() / Math.Sqrt(12);
+            //Define voltage vector basis e1, e2
+            var e1 = u1 - u4;
+            var e2 = u2 - u4;
+            var e3 = u3 - u4;
+            var e123 = GaPoTNumUtils.OuterProduct(e1, e2, e3);
+            
+            Console.WriteLine($@"e1 = {e1.TermsToText()}");
+            Console.WriteLine($@"e2 = {e2.TermsToText()}");
+            Console.WriteLine($@"e3 = {e3.TermsToText()}");
+            Console.WriteLine($@"e123 = {e123.TermsToText()}");
+            Console.WriteLine();
+            
+            //Ortho-normalize e1, e2, e3
+            var orthoVectors = GaPoTNumUtils.ApplyGramSchmidt(new[] {e1, e2, e3}).ToArray();
+
+            var c1 = orthoVectors[0];
+            var c2 = orthoVectors[1];
+            var c3 = orthoVectors[2];
             var c4 = -GaPoTNumUtils.OuterProduct(c1, c2, c3).Gp(u1234.Inverse()).GetVectorPart();
             var c1234 = GaPoTNumUtils.OuterProduct(c1, c2, c3, c4);
             
@@ -87,6 +102,19 @@ namespace GAPoTNumLib.Framework.Samples
             Console.WriteLine($@"rotor2 gp reverse(rotor2) = {rotor2.Gp(rotor2.Reverse()).TermsToText()}");
             Console.WriteLine();
             
+            //We can combine the two simple rotors to get <c1, c2> from <u1, u2> directly
+            var rotor21 = rotor2.Gp(rotor1);
+            Console.WriteLine($@"rotor21 = {rotor21.TermsToText()}");
+            Console.WriteLine($@"reverse(rotor21) = {rotor21.Reverse().TermsToText()}");
+            Console.WriteLine($@"rotor21 gp reverse(rotor21) = {rotor21.Gp(rotor21.Reverse()).TermsToText()}");
+            Console.WriteLine();
+            
+            Console.WriteLine($@"rotation of u1 under rotor21 = {u1.ApplyRotor(rotor21).TermsToText()}");
+            Console.WriteLine($@"rotation of u2 under rotor21 = {u2.ApplyRotor(rotor21).TermsToText()}");
+            Console.WriteLine($@"rotation of u3 under rotor21 = {u3.ApplyRotor(rotor21).TermsToText()}");
+            Console.WriteLine($@"rotation of u4 under rotor21 = {u4.ApplyRotor(rotor21).TermsToText()}");
+            Console.WriteLine();
+
             //Rotate all basis vectors using rotor2
             var u1_2 = u1_1.ApplyRotor(rotor2);
             var u2_2 = u2_1.ApplyRotor(rotor2);
@@ -139,6 +167,26 @@ namespace GAPoTNumLib.Framework.Samples
             Console.WriteLine($@"rotation of u2 under rotor = {cc2.TermsToText()}");
             Console.WriteLine($@"rotation of u3 under rotor = {cc3.TermsToText()}");
             Console.WriteLine($@"rotation of u4 under rotor = {cc4.TermsToText()}");
+            Console.WriteLine();
+            
+            //Find the projections of u1, u2, u3, u4 on e123
+            var pu1 = u1.GetProjectionOnBlade(e123);
+            var pu2 = u2.GetProjectionOnBlade(e123);
+            var pu3 = u3.GetProjectionOnBlade(e123);
+            var pu4 = u4.GetProjectionOnBlade(e123);
+            
+            Console.WriteLine($@"projection of u1 on e123 = {pu1.TermsToText()}");
+            Console.WriteLine($@"projection of u2 on e123 = {pu2.TermsToText()}");
+            Console.WriteLine($@"projection of u3 on e123 = {pu3.TermsToText()}");
+            Console.WriteLine($@"projection of u4 on e123 = {pu4.TermsToText()}");
+            Console.WriteLine();
+
+            Console.WriteLine($@"angle between projections of u1,u2 on e123 = {pu1.GetAngle(pu2).RadiansToDegrees():G}");
+            Console.WriteLine($@"angle between projections of u2,u3 on e123 = {pu2.GetAngle(pu3).RadiansToDegrees():G}");
+            Console.WriteLine($@"angle between projections of u1,u3 on e123 = {pu1.GetAngle(pu3).RadiansToDegrees():G}");
+            Console.WriteLine($@"angle between projections of u1,u4 on e123 = {pu1.GetAngle(pu4).RadiansToDegrees():G}");
+            Console.WriteLine($@"angle between projections of u2,u4 on e123 = {pu2.GetAngle(pu4).RadiansToDegrees():G}");
+            Console.WriteLine($@"angle between projections of u3,u4 on e123 = {pu3.GetAngle(pu4).RadiansToDegrees():G}");
             Console.WriteLine();
         }
     }

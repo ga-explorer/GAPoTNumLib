@@ -328,6 +328,48 @@ GaPoTNumBiversor
  text and LaTeX formats exist.
 \end_layout
 
+\begin_layout Itemize
+
+\family typewriter
+GaPoTNumMultivector
+\family default
+ is capable of representing arbitrary sparse multivectors containing terms
+ of grades < 32.
+ A vector or biversor can be converted into a multivector using their 
+\family typewriter
+ToMultivectr()
+\family default
+ methods.
+ The user can extract the vector part (grade 1 terms) of a multivector using
+ the 
+\family typewriter
+GetVectorPart()
+\family default
+ method, and the same for the 
+\family typewriter
+GetBiversorPart()
+\family default
+ method.
+ Many computations on multivectors are also implemented like the geometric,
+ outer, left-contraction, and scalar products using the methods 
+\family typewriter
+Gp()
+\family default
+, 
+\family typewriter
+Op()
+\family default
+, 
+\family typewriter
+Lcp()
+\family default
+, and 
+\family typewriter
+Sp()
+\family default
+ in addition to the reverse, inverse, negative, squared norm, etc.
+\end_layout
+
 \begin_layout Standard
 For the elements of a GAPoT vector, there are three classes that can be
  used to hold information on terms and phasors:

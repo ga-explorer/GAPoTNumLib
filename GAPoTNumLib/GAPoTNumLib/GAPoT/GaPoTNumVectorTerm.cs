@@ -105,7 +105,6 @@ namespace GAPoTNumLib.GAPoT
             return $@"\left( {valueText} \right) {basisText}";
         }
 
-
         public GaPoTNumVectorTerm OffsetTermId(int delta)
         {
             var id = TermId + delta;

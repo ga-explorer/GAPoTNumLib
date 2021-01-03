@@ -180,6 +180,19 @@ namespace GAPoTNumLib.GAPoT
             return new GaPoTNumVectorTerm(termIDsArray[0], Value);
         }
 
+        public GaPoTNumBiversorTerm ToBiversorTerm()
+        {
+            if (IDsPattern == 0)
+                return new GaPoTNumBiversorTerm(Value);
+
+            var termIDsArray = GetTermIDs().ToArray();
+
+            if (termIDsArray.Length != 2)
+                throw new InvalidOperationException($"Can't convert multivector term <{termIDsArray.Concatenate(",")}> to biversor term");
+
+            return new GaPoTNumBiversorTerm(termIDsArray[0], termIDsArray[1], Value);
+        }
+
 
         public string ToText()
         {

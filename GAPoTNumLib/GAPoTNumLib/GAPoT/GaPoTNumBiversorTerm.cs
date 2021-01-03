@@ -60,6 +60,13 @@ namespace GAPoTNumLib.GAPoT
             => TermId1 % 2 == 1 && TermId2 == TermId1 + 1;
 
 
+        internal GaPoTNumBiversorTerm(double value)
+        {
+            TermId1 = 0;
+            TermId2 = 0;
+            Value = value;
+        }
+
         internal GaPoTNumBiversorTerm(int id1, int id2, double value)
         {
             Debug.Assert(id1 == id2 || (id1 > 0 && id2 > 0));
@@ -109,7 +116,6 @@ namespace GAPoTNumLib.GAPoT
                 : new GaPoTNumBiversorTerm(TermId1, TermId2, -Value * s);
         }
 
-
         public GaPoTNumMultivectorTerm ToMultivectorTerm()
         {
             if (TermId1 == TermId2)
@@ -146,7 +152,6 @@ namespace GAPoTNumLib.GAPoT
                 : $@"\left( {valueText} \right) {basisText}";
         }
  
-
         public GaPoTNumBiversorTerm OffsetId(int delta)
         {
             if (IsScalar)

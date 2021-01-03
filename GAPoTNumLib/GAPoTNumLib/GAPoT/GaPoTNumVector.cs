@@ -598,19 +598,27 @@ namespace GAPoTNumLib.GAPoT
         {
             var invNorm1 = 1.0d / Norm();
             var invNorm2 = 1.0d / v2.Norm();
+            var cosAngle = DotProduct(v2) * invNorm1 * invNorm2;
+
+            if (cosAngle == 1.0d)
+                return new GaPoTNumMultivector(new []{ new GaPoTNumMultivectorTerm(0, 1) });
             
-            var rotationAngle = Math.Acos(DotProduct(v2) * invNorm1 * invNorm2) / 2;
+            //TODO: Handle the case for cosAngle == -1
+            
+            var cosHalfAngle = Math.Sqrt(0.5d * (1.0d + cosAngle));
+            var sinHalfAngle = Math.Sqrt(0.5d * (1.0d - cosAngle));
             var rotationBlade = Op(v2);
 
-            var rotationBladeInvNorm = 
-                1.0d / Math.Sqrt(Math.Abs(rotationBlade.Gp(rotationBlade).GetTermValue(0)));
+            var rotationBladeScalar = 
+                sinHalfAngle / Math.Sqrt(Math.Abs(rotationBlade.Gp(rotationBlade).GetTermValue(0)));
 
+            var rotor= cosHalfAngle - rotationBladeScalar * rotationBlade;
+
+            //var rotationAngle = Math.Acos(DotProduct(v2) * invNorm1 * invNorm2) / 2;
             //var unitBlade = rotationBlade.ScaleBy(rotationBladeInvNorm);
-
             //var unitBladeNorm = unitBlade.Gp(unitBlade).TermsToText();
-            
-            var rotor= Math.Cos(rotationAngle) - (rotationBladeInvNorm * Math.Sin(rotationAngle)) * rotationBlade;
-            
+            //var rotor= Math.Cos(rotationAngle) - (rotationBladeInvNorm * Math.Sin(rotationAngle)) * rotationBlade;
+
             //Normalize rotor
             //var invRotorNorm = 1.0d / Math.Sqrt(rotor.Gp(rotor.Reverse()).GetTermValue(0));
             
