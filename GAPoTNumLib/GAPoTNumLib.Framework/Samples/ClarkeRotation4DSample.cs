@@ -5,7 +5,7 @@ using GAPoTNumLib.GAPoT;
 
 namespace GAPoTNumLib.Framework.Samples
 {
-    public static class ClarkeRotationGeneral3PhaseSample
+    public static class ClarkeRotation4DSample
     {
         public static void Execute()
         {
@@ -28,10 +28,10 @@ namespace GAPoTNumLib.Framework.Samples
             Console.WriteLine($@"inverse(u1234) = {u1234.Inverse().TermsToText()}");
             Console.WriteLine();
             
-            //Define voltage vector basis e1, e2
-            var e1 = u1 - u4;
-            var e2 = u2 - u4;
-            var e3 = u3 - u4;
+            //Define voltage vector basis e1, e2, e3
+            var e1 = u2 - u1;
+            var e2 = u3 - u1;
+            var e3 = u4 - u1;
             var e123 = GaPoTNumUtils.OuterProduct(e1, e2, e3);
             
             Console.WriteLine($@"e1 = {e1.TermsToText()}");
@@ -157,6 +157,11 @@ namespace GAPoTNumLib.Framework.Samples
             Console.WriteLine($@"rotor gp reverse(rotor) = {rotor.Gp(rotor.Reverse()).TermsToText()}");
             Console.WriteLine();
             
+            //Are the two rotors are orthogonal? No.
+            //var diffRotors = rotor21.Gp(rotor3) - rotor3.Gp(rotor21);
+            //Console.WriteLine($@"Are the two rotors are orthogonal (0 means Yes)? {diffRotors.TermsToText()}");
+            //Console.WriteLine();
+
             //Rotate all original basis vectors using final rotor
             var cc1 = u1.ApplyRotor(rotor);
             var cc2 = u2.ApplyRotor(rotor);
@@ -169,7 +174,7 @@ namespace GAPoTNumLib.Framework.Samples
             Console.WriteLine($@"rotation of u4 under rotor = {cc4.TermsToText()}");
             Console.WriteLine();
             
-            //Find the projections of u1, u2, u3, u4 on e123
+            //Find the projections of u1, u2, u3, u4 on e234
             var pu1 = u1.GetProjectionOnBlade(e123);
             var pu2 = u2.GetProjectionOnBlade(e123);
             var pu3 = u3.GetProjectionOnBlade(e123);

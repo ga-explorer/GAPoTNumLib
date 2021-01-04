@@ -5,7 +5,7 @@ using GAPoTNumLib.GAPoT;
 
 namespace GAPoTNumLib.Framework.Samples
 {
-    public static class ClarkeRotationBalanced3PhaseSample
+    public static class ClarkeRotation3DSample
     {
         public static void Execute()
         {
@@ -27,8 +27,8 @@ namespace GAPoTNumLib.Framework.Samples
             Console.WriteLine();
             
             //Define voltage vector basis e1, e2
-            var e1 = u1 - u3;
-            var e2 = u2 - u3;
+            var e1 = u2 - u1;
+            var e2 = u3 - u1;
             var e12 = GaPoTNumUtils.OuterProduct(e1, e2);
             
             Console.WriteLine($@"e1 = {e1.TermsToText()}");
