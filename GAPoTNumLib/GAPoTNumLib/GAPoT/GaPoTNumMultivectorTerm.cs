@@ -162,6 +162,22 @@ namespace GAPoTNumLib.GAPoT
             );
         }
 
+        public GaPoTNumMultivectorTerm GradeInvolution()
+        {
+            return new GaPoTNumMultivectorTerm(
+                IDsPattern, 
+                IDsPattern.BasisBladeHasNegativeGradeInv() ? -Value : Value
+            );
+        }
+
+        public GaPoTNumMultivectorTerm CliffordConjugate()
+        {
+            return new GaPoTNumMultivectorTerm(
+                IDsPattern, 
+                IDsPattern.BasisBladeHasNegativeCliffConj() ? -Value : Value
+            );
+        }
+
         public GaPoTNumMultivectorTerm ScaledReverse(double s)
         {
             var value = (IDsPattern.BasisBladeHasNegativeReverse() ? -Value : Value) * s;

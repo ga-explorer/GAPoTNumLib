@@ -76,6 +76,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Samples\ClarkeRotation3DSample.cs" />
+    <Compile Include="Samples\RotorsSequenceSample.cs" />
     <Compile Include="Samples\Construction\BiversorConstructionSample.cs" />
     <Compile Include="Samples\Construction\VectorConstructionSample.cs" />
     <Compile Include="Samples\ParsingSample1.cs" />

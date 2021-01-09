@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using GAPoTNumLib.Text;
 
 namespace GAPoTNumLib.GAPoT
@@ -220,6 +221,26 @@ namespace GAPoTNumLib.GAPoT
             return Norm2().IsNearZero();
         }
 
+        public bool IsRotor()
+        {
+            if (GetNonZeroTerms().Select(term => term.GetGrade()).Any(grade => grade % 2 != 0))
+                return false;
+
+            var s = Gp(Reverse()) - 1.0d;
+
+            return s.IsZero();
+        }
+
+        public bool IsSimpleRotor()
+        {
+            if (GetNonZeroTerms().Select(term => term.GetGrade()).Any(grade => grade != 0 && grade != 2))
+                return false;
+
+            var s = Gp(Reverse()) - 1.0d;
+
+            return s.IsZero();
+        }
+
         public GaPoTNumMultivector SetTerm(int idsPattern, double value)
         {
             Debug.Assert(idsPattern >= 0);
@@ -268,6 +289,11 @@ namespace GAPoTNumLib.GAPoT
 
         
         public IEnumerable<GaPoTNumMultivectorTerm> GetTerms()
+        {
+            return _termsDictionary.Values.Where(t => !t.Value.IsNearZero());
+        }
+
+        public IEnumerable<GaPoTNumMultivectorTerm> GetNonZeroTerms()
         {
             return _termsDictionary.Values.Where(t => !t.Value.IsNearZero());
         }
@@ -431,6 +457,20 @@ namespace GAPoTNumLib.GAPoT
             );
         }
 
+        public GaPoTNumMultivector GradeInvolution()
+        {
+            return new GaPoTNumMultivector(
+                _termsDictionary.Values.Select(t => t.GradeInvolution())
+            );
+        }
+
+        public GaPoTNumMultivector CliffordConjugate()
+        {
+            return new GaPoTNumMultivector(
+                _termsDictionary.Values.Select(t => t.CliffordConjugate())
+            );
+        }
+
         public GaPoTNumMultivector ScaledReverse(double s)
         {
             return new GaPoTNumMultivector(
@@ -481,6 +521,14 @@ namespace GAPoTNumLib.GAPoT
             return new GaPoTNumMultivector(termsArray);
         }
         
+        public GaPoTNumMultivector ApplyRotor(GaPoTNumMultivector rotor)
+        {
+            var r1 = rotor;
+            var r2 = rotor.Reverse();
+
+            return r1.Gp(this).Gp(r2);
+        }
+        
         
         public string TermsToText()
         {
@@ -500,6 +548,42 @@ namespace GAPoTNumLib.GAPoT
             return termsArray.Length == 0
                 ? "0"
                 : string.Join(" + ", termsArray.Select(t => t.ToLaTeX()));
+        }
+
+        public string ToLaTeXEquationsArray(string multivectorName, string basisName)
+        {
+            var textComposer = new StringBuilder();
+
+            textComposer.AppendLine(@"\begin{eqnarray*}");
+
+            var termsArray = 
+                GetNonZeroTerms()
+                    .OrderBy(t => t.GetGrade())
+                    .ThenBy(t => t.IDsPattern)
+                    .ToArray();
+
+            var j = 0;
+            foreach (var term in termsArray)
+            {
+                var termLaTeX = term
+                        .ToLaTeX()
+                        .Replace(@"\sigma_", $"{basisName}_");
+
+                var line = j == 0
+                    ? $@"{multivectorName} & = & {termLaTeX}"
+                    : $@" & + & {termLaTeX}";
+
+                if (j < termsArray.Length - 1)
+                    line += @"\\";
+
+                textComposer.AppendLine(line);
+
+                j++;
+            }
+
+            textComposer.AppendLine(@"\end{eqnarray*}");
+
+            return textComposer.ToString();
         }
 
 

@@ -12,7 +12,7 @@ namespace GAPoTNumLib.Framework
     {
         static void Main(string[] args)
         {
-            ClarkeRotation4DSample.Execute();
+            RotorsSequenceSample.Execute();
 
             Console.WriteLine();
             Console.WriteLine(@"Press any key to exit...");

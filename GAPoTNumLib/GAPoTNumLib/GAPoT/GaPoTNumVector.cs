@@ -721,7 +721,7 @@ namespace GAPoTNumLib.GAPoT
 
         public string ToText()
         {
-            return PolarPhasorsToText();
+            return TermsToText();
         }
 
         public string TermsToText()

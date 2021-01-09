@@ -47,5 +47,32 @@ namespace GAPoTNumLib.Framework
 
             return mv;
         }
+
+        public static GaPoTNumFrame CreateBasisFrame(int vectorsCount)
+        {
+            return GaPoTNumFrame.CreateBasisFrame(vectorsCount);
+        }
+
+        public static GaPoTNumFrame CreateClarkeFrame(int vectorsCount)
+        {
+            return GaPoTNumFrame.CreateClarkeFrame(vectorsCount);
+        }
+
+        public static GaPoTNumFrame CreateKirchhoffFrame(int vectorsCount)
+        {
+            return GaPoTNumFrame.CreateKirchhoffFrame(vectorsCount);
+        }
+
+        public static GaPoTNumFrame CreateGramSchmidtFrame(int vectorsCount)
+        {
+            return GaPoTNumFrame.CreateGramSchmidtFrame(vectorsCount);
+        }
+
+        public static GaPoTNumRotorsSequence CreateRotorsSequence(GaPoTNumFrame sourceFrame, GaPoTNumFrame targetFrame)
+        {
+            return GaPoTNumRotorsSequence.Create(
+                sourceFrame.GetRotorsToFrame(targetFrame)
+            );
+        }
     }
 }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using GAPoTNumLib.Interop.MATLAB;
 using GAPoTNumLib.Structures;
+using GAPoTNumLib.Text;
 using Irony.Parsing;
 
 namespace GAPoTNumLib.GAPoT
@@ -61,6 +63,35 @@ namespace GAPoTNumLib.GAPoT
             var angleInDegrees = angleInRadians.RadiansToDegrees().GetLaTeXNumber();
 
             return angleInDegrees + @"^{\circ}";
+        }
+
+        public static string GetLaTeXArray(this double[,] array)
+        {
+            var rowsCount = array.GetLength(0);
+            var colsCount = array.GetLength(1);
+
+            var textComposer = new StringBuilder();
+
+            var ccc = Enumerable.Repeat("c", array.GetLength(1)).Concatenate();
+            textComposer.AppendLine(@"\left(\begin{array}{" + ccc + "}");
+
+            for (var i = 0; i < rowsCount; i++)
+            {
+                for (var j = 0; j < colsCount; j++)
+                {
+                    textComposer.Append(array[i, j].GetLaTeXNumber());
+
+                    if (j < colsCount - 1)
+                        textComposer.Append(@" & ");
+                }
+
+                if (i < rowsCount - 1)
+                    textComposer.Append(@"\\");
+            }
+            
+            textComposer.Append(@"\end{array}\right)");
+
+            return textComposer.ToString();
         }
 
         public static double DegreesToRadians(this double angle)
@@ -207,6 +238,36 @@ namespace GAPoTNumLib.GAPoT
             return grade % 4 > 1;
 
             //return ((grade * (grade - 1)) & 2) != 0;
+        }
+
+        public static bool GradeHasNegativeGradeInv(this int grade)
+        {
+            return (grade & 1) != 0;
+        }
+
+        public static bool BasisBladeHasNegativeGradeInv(this int idsPattern)
+        {
+            var grade = idsPattern.GetBasisBladeGrade();
+            
+            return (grade & 1) != 0;
+        }
+
+        public static bool GradeHasNegativeCliffConj(this int grade)
+        {
+            var v = grade % 4;
+            return v == 1 || v == 2;
+
+            //return ((grade * (grade + 1)) & 2) != 0;
+        }
+
+        public static bool BasisBladeHasNegativeCliffConj(this int idsPattern)
+        {
+            var grade = idsPattern.GetBasisBladeGrade();
+            
+            var v = grade % 4;
+            return v == 1 || v == 2;
+
+            //return ((grade * (grade + 1)) & 2) != 0;
         }
 
 
@@ -410,6 +471,16 @@ namespace GAPoTNumLib.GAPoT
                 );
         }
 
+        public static GaPoTNumMultivector OuterProduct(IReadOnlyList<GaPoTNumVector> vectorsList)
+        {
+            return vectorsList
+                .Skip(1)
+                .Aggregate(
+                    vectorsList[0].ToMultivector(), 
+                    (current, mv) => current.Op(mv.ToMultivector())
+                );
+        }
+
         public static GaPoTNumMultivector OuterProduct(params GaPoTNumMultivector[] multivectorsList)
         {
             return multivectorsList
@@ -443,6 +514,30 @@ namespace GAPoTNumLib.GAPoT
                 mv1 = mv2;
             }
         }
+
+        public static IEnumerable<GaPoTNumVector> ApplyGramSchmidt(this IReadOnlyList<GaPoTNumVector> vectorsArray, bool makeUnitVectors)
+        {
+            var v1 = vectorsArray[0];
+            yield return makeUnitVectors 
+                ? (v1 / v1.Norm()) 
+                : v1;
+            
+            var mv1 = vectorsArray[0].ToMultivector();
+            
+            for (var i = 1; i < vectorsArray.Count; i++)
+            {
+                var mv2 = mv1.Op(vectorsArray[i]);
+                
+                var orthogonalVector = mv1.Reverse().Gp(mv2).GetVectorPart();
+                
+                yield return makeUnitVectors
+                    ? (orthogonalVector / orthogonalVector.Norm())
+                    : orthogonalVector;
+                
+                mv1 = mv2;
+            }
+        }
+
 
         public static GaNumMatlabSparseMatrixData PolarPhasorsToMatlabArray(this IEnumerable<GaPoTNumPolarPhasor> phasorsList, int rowsCount)
         {
