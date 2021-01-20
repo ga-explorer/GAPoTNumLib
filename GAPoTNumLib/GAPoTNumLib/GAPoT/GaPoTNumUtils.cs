@@ -13,9 +13,6 @@ namespace GAPoTNumLib.GAPoT
 {
     public static class GaPoTNumUtils
     {
-        public static int LaTeXDecimalPlaces { get; set; }
-            = 4;
-
         public static double Epsilon { get; internal set; } 
             = Math.Pow(2, -25);
 
@@ -34,65 +31,45 @@ namespace GAPoTNumLib.GAPoT
             return Math.Abs(d2 - d1) <= Epsilon;
         }
 
-        public static string GetLaTeXBasisName(this string basisSubscript)
+        public static IEnumerable<IList<int>> GetIndexPermutations(int count)
         {
-            //return $@"\boldsymbol{{\sigma_{{{basisSubscript}}}}}";
-            return $@"\sigma_{{{basisSubscript}}}";
+            var indicesArray = Enumerable.Range(0, count).ToArray();
+
+            var list = new List<IList<int>>();
+
+            return GetIndexPermutations(indicesArray, 0, indicesArray.Length - 1, list);
         }
 
-        public static string GetLaTeXNumber(this double value)
+        private static IEnumerable<IList<int>> GetIndexPermutations(int[] indicesArray, int start, int end, IList<IList<int>> list)
         {
-            var valueText = value.ToString("G");
-
-            if (valueText.Contains('E'))
+            if (start == end)
             {
-                var ePosition = valueText.IndexOf('E');
-
-                var magnitude = double.Parse(valueText.Substring(0, ePosition));
-                var magnitudeText = Math.Round(magnitude, LaTeXDecimalPlaces).ToString("G");
-                var exponentText = valueText.Substring(ePosition + 1);
-
-                return $@"{magnitudeText} \times 10^{{{exponentText}}}";
+                // We have one of our possible n! solutions,
+                // add it to the list.
+                list.Add(new List<int>(indicesArray));
             }
-
-            return Math.Round(value, LaTeXDecimalPlaces).ToString("G");
-        }
-
-        public static string GetLaTeXAngleInDegrees(this double angleInRadians)
-        {
-            var angleInDegrees = angleInRadians.RadiansToDegrees().GetLaTeXNumber();
-
-            return angleInDegrees + @"^{\circ}";
-        }
-
-        public static string GetLaTeXArray(this double[,] array)
-        {
-            var rowsCount = array.GetLength(0);
-            var colsCount = array.GetLength(1);
-
-            var textComposer = new StringBuilder();
-
-            var ccc = Enumerable.Repeat("c", array.GetLength(1)).Concatenate();
-            textComposer.AppendLine(@"\left(\begin{array}{" + ccc + "}");
-
-            for (var i = 0; i < rowsCount; i++)
+            else
             {
-                for (var j = 0; j < colsCount; j++)
+                for (var i = start; i <= end; i++)
                 {
-                    textComposer.Append(array[i, j].GetLaTeXNumber());
+                    Swap(ref indicesArray[start], ref indicesArray[i]);
 
-                    if (j < colsCount - 1)
-                        textComposer.Append(@" & ");
+                    GetIndexPermutations(indicesArray, start + 1, end, list);
+
+                    Swap(ref indicesArray[start], ref indicesArray[i]);
                 }
-
-                if (i < rowsCount - 1)
-                    textComposer.Append(@"\\");
             }
-            
-            textComposer.Append(@"\end{array}\right)");
 
-            return textComposer.ToString();
+            return list;
         }
+
+        private static void Swap(ref int a, ref int b)
+        {
+            var temp = a;
+            a = b;
+            b = temp;
+        }
+
 
         public static double DegreesToRadians(this double angle)
         {
@@ -114,6 +91,17 @@ namespace GAPoTNumLib.GAPoT
             return id1 < id2 
                 ? new Tuple<int, int>(id1, id2) 
                 : new Tuple<int, int>(id2, id1);
+        }
+
+        public static bool ValidateIndexPermutationList(params int[] inputList)
+        {
+            var orderedList =
+                inputList.Distinct().OrderBy(i => i).ToArray();
+
+            return
+                orderedList.Length == inputList.Length &&
+                orderedList[0] == 0 &&
+                orderedList[orderedList.Length - 1] != (orderedList.Length - 1);
         }
 
 
@@ -491,29 +479,25 @@ namespace GAPoTNumLib.GAPoT
                 );
         }
 
-        public static GaPoTNumVector GetProjectionOnBlade(this GaPoTNumVector v, GaPoTNumMultivector blade)
-        {
-            return v.ToMultivector().Lcp(blade).Lcp(blade.Inverse()).GetVectorPart();
-        }
-        
-        public static IEnumerable<GaPoTNumVector> ApplyGramSchmidt(GaPoTNumVector[] vectorsArray)
-        {
-            var v1 = vectorsArray[0];
-            yield return (v1 / v1.Norm());
+        //public static IEnumerable<GaPoTNumVector> ApplyGramSchmidt(GaPoTNumVector[] vectorsArray)
+        //{
+        //    var v1 = vectorsArray[0];
+        //    yield return (v1 / v1.Norm());
             
-            var mv1 = vectorsArray[0].ToMultivector();
+        //    var mv1 = vectorsArray[0].ToMultivector();
             
-            for (var i = 1; i < vectorsArray.Length; i++)
-            {
-                var mv2 = mv1.Op(vectorsArray[i]);
+        //    for (var i = 1; i < vectorsArray.Length; i++)
+        //    {
+        //        var mv2 = mv1.Op(vectorsArray[i]);
                 
-                var orthogonalVector = mv1.Reverse().Gp(mv2).GetVectorPart();
+        //        var orthogonalVector = mv1.Reverse().Gp(mv2).GetVectorPart();
+        //        //var orthogonalVector = mv2.Gp(mv1.Reverse()).GetVectorPart();
                 
-                yield return (orthogonalVector / orthogonalVector.Norm());
+        //        yield return (orthogonalVector / orthogonalVector.Norm());
                 
-                mv1 = mv2;
-            }
-        }
+        //        mv1 = mv2;
+        //    }
+        //}
 
         public static IEnumerable<GaPoTNumVector> ApplyGramSchmidt(this IReadOnlyList<GaPoTNumVector> vectorsArray, bool makeUnitVectors)
         {
@@ -529,6 +513,7 @@ namespace GAPoTNumLib.GAPoT
                 var mv2 = mv1.Op(vectorsArray[i]);
                 
                 var orthogonalVector = mv1.Reverse().Gp(mv2).GetVectorPart();
+                //var orthogonalVector = mv2.Gp(mv1.Reverse()).GetVectorPart();
                 
                 yield return makeUnitVectors
                     ? (orthogonalVector / orthogonalVector.Norm())

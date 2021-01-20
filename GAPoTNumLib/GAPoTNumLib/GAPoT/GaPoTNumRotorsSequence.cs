@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GAPoTNumLib.Text;
 
@@ -20,6 +21,83 @@ namespace GAPoTNumLib.GAPoT
         public static GaPoTNumRotorsSequence Create(IEnumerable<GaPoTNumMultivector> rotorsList)
         {
             return new GaPoTNumRotorsSequence(rotorsList);
+        }
+        
+        public static GaPoTNumRotorsSequence CreateFromOrthonormalFrames(GaPoTNumFrame sourceFrame, GaPoTNumFrame targetFrame)
+        {
+            Debug.Assert(targetFrame.Count == sourceFrame.Count);
+            Debug.Assert(sourceFrame.IsOrthonormal() && targetFrame.IsOrthonormal());
+            Debug.Assert(sourceFrame.HasSameHandedness(targetFrame));
+
+            var rotorsSequence = new GaPoTNumRotorsSequence();
+
+            var sourceFrameVectors = new GaPoTNumVector[sourceFrame.Count];
+
+            for (var i = 0; i < sourceFrame.Count; i++)
+                sourceFrameVectors[i] = sourceFrame[i];
+            
+            for (var i = 0; i < sourceFrame.Count - 1; i++)
+            {
+                var sourceVector = sourceFrameVectors[i];
+                var targetVector = targetFrame[i];
+
+                var rotor = 
+                    sourceVector.GetRotorToVector(targetVector);
+
+                rotorsSequence.AppendRotor(rotor);
+
+                for (var j = i + 1; j < sourceFrame.Count; j++)
+                    sourceFrameVectors[j] = sourceFrameVectors[j].ApplyRotor(rotor);
+            }
+
+            return rotorsSequence;
+        }
+
+        public static GaPoTNumRotorsSequence CreateFromFrames(int baseSpaceDimensions, GaPoTNumFrame sourceFrame, GaPoTNumFrame targetFrame)
+        {
+            Debug.Assert(targetFrame.Count == sourceFrame.Count);
+            //Debug.Assert(IsOrthonormal() && targetFrame.IsOrthonormal());
+            Debug.Assert(sourceFrame.HasSameHandedness(targetFrame));
+
+            var rotorsSequence = new GaPoTNumRotorsSequence();
+
+            var pseudoScalar = 
+                GaPoTNumMultivector
+                    .CreateZero()
+                    .SetTerm((1 << baseSpaceDimensions) - 1, 1.0d);
+
+            var sourceFrameVectors = new GaPoTNumVector[sourceFrame.Count];
+            var targetFrameVectors = new GaPoTNumVector[targetFrame.Count];
+
+            for (var i = 0; i < sourceFrame.Count; i++)
+            {
+                sourceFrameVectors[i] = sourceFrame[i];
+                targetFrameVectors[i] = targetFrame[i];
+            }
+            
+            for (var i = 0; i < sourceFrame.Count - 1; i++)
+            {
+                var sourceVector = sourceFrameVectors[i];
+                var targetVector = targetFrameVectors[i];
+
+                var rotor = 
+                    sourceVector.GetRotorToVector(targetVector);
+
+                rotorsSequence.AppendRotor(rotor);
+
+                pseudoScalar = targetVector.ToMultivector().Lcp(pseudoScalar.Inverse());
+
+                for (var j = i + 1; j < sourceFrame.Count; j++)
+                {
+                    sourceFrameVectors[j] = 
+                        sourceFrameVectors[j].ApplyRotor(rotor).GetProjectionOnBlade(pseudoScalar);
+
+                    targetFrameVectors[j] =
+                        targetFrameVectors[j].GetProjectionOnBlade(pseudoScalar);
+                }
+            }
+
+            return rotorsSequence;
         }
 
 
@@ -196,6 +274,16 @@ namespace GAPoTNumLib.GAPoT
             return Rotate(
                 GaPoTNumFrame.CreateBasisFrame(rowsCount)
             ).GetMatrix(rowsCount);
+        }
+
+        public GaPoTNumRotorsSequence Reverse()
+        {
+            var rotorsSequence = new GaPoTNumRotorsSequence();
+
+            foreach (var rotor in _rotorsList)
+                rotorsSequence.PrependRotor(rotor.Reverse());
+
+            return rotorsSequence;
         }
 
         public IEnumerator<GaPoTNumMultivector> GetEnumerator()

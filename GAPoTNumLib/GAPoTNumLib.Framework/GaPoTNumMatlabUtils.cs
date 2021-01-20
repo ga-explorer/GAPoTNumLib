@@ -48,6 +48,16 @@ namespace GAPoTNumLib.Framework
             return mv;
         }
 
+        public static GaPoTNumVector CreateBasisVector(int id)
+        {
+            return GaPoTNumVector.CreateZero().AddTerm(id, 1.0d);
+        }
+
+        public static GaPoTNumMultivector CreateBasisBlade(int idsPattern)
+        {
+            return GaPoTNumMultivector.CreateZero().AddTerm(idsPattern, 1.0d);
+        }
+
         public static GaPoTNumFrame CreateBasisFrame(int vectorsCount)
         {
             return GaPoTNumFrame.CreateBasisFrame(vectorsCount);

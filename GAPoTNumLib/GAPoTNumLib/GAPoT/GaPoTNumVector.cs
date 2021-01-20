@@ -11,6 +11,19 @@ namespace GAPoTNumLib.GAPoT
 {
     public sealed class GaPoTNumVector : IReadOnlyList<double>
     {
+        public static GaPoTNumVector CreateZero()
+        {
+            return new GaPoTNumVector();
+        }
+
+        public static GaPoTNumVector CreateAutoVector(int n)
+        {
+            return new GaPoTNumVector(
+                Enumerable.Repeat(1.0d, n)
+            );
+        }
+
+
         public static GaPoTNumVector operator -(GaPoTNumVector v)
         {
             var result = new GaPoTNumVector();
@@ -230,6 +243,23 @@ namespace GAPoTNumLib.GAPoT
 
         public GaPoTNumVector()
         {
+        }
+
+        public GaPoTNumVector(params double[] valuesList)
+        {
+            for (var i = 0; i < valuesList.Length; i++)
+                AddTerm(i + 1, valuesList[i]);
+        }
+
+        public GaPoTNumVector(IEnumerable<double> valuesList)
+        {
+            var i = 1;
+            foreach (var value in valuesList)
+            {
+                AddTerm(i, value);
+
+                i++;
+            }
         }
 
         public GaPoTNumVector(IEnumerable<GaPoTNumVectorTerm> termsList)
@@ -645,6 +675,26 @@ namespace GAPoTNumLib.GAPoT
             var mv = r1.Gp(v).Gp(r2);
 
             return mv.GetVectorPart();
+        }
+
+        public GaPoTNumVector GetProjectionOnFrame(GaPoTNumFrame frame)
+        {
+            var vector = new GaPoTNumVector();
+
+            foreach (var term in _termsDictionary.Values)
+            {
+                var i = term.TermId - 1;
+                var v = term.Value;
+
+                vector += v * frame[i];
+            }
+
+            return vector;
+        }
+
+        public GaPoTNumVector GetProjectionOnBlade(GaPoTNumMultivector blade)
+        {
+            return ToMultivector().Lcp(blade).Lcp(blade.Inverse()).GetVectorPart();
         }
 
         public double Norm()

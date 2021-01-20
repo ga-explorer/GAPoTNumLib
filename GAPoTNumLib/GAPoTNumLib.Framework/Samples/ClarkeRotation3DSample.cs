@@ -37,7 +37,7 @@ namespace GAPoTNumLib.Framework.Samples
             Console.WriteLine();
             
             //Ortho-normalize e1, e2
-            var orthoVectors = GaPoTNumUtils.ApplyGramSchmidt(new[] {e1, e2}).ToArray();
+            var orthoVectors = new[] {e1, e2}.ApplyGramSchmidt(true).ToArray();
 
             var c1 = orthoVectors[0];
             var c2 = orthoVectors[1];
