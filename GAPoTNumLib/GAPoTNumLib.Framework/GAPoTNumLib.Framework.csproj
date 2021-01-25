@@ -61,9 +61,13 @@
     <Reference Include="Irony.Interpreter, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ca48ace7223ead47, processorArchitecture=MSIL">
       <HintPath>..\packages\Irony.Interpreter.1.1.0\lib\net40\Irony.Interpreter.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics, Version=4.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.15.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,6 +83,7 @@
     <Compile Include="Samples\FbdFrameSample.cs" />
     <Compile Include="Samples\GramSchmidtRotation3DSample.cs" />
     <Compile Include="Samples\GramSchmidtRotation4DSample.cs" />
+    <Compile Include="Samples\OrthogonalRotorsDecompositionSample.cs" />
     <Compile Include="Samples\RotorsSequence4DSample.cs" />
     <Compile Include="Samples\RotorsSequenceSample.cs" />
     <Compile Include="Samples\Construction\BiversorConstructionSample.cs" />

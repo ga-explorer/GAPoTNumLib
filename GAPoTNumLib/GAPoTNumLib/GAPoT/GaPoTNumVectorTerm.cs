@@ -88,6 +88,11 @@ namespace GAPoTNumLib.GAPoT
             return new GaPoTNumMultivectorTerm(1 << (TermId - 1) , Value);
         }
 
+        public GaPoTNumVectorTerm Round(int places)
+        {
+            return new GaPoTNumVectorTerm(TermId, Math.Round(Value, places));
+        }
+
         public string ToText()
         {
             //if (Value == 0)

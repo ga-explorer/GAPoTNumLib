@@ -12,7 +12,7 @@ namespace GAPoTNumLib.Framework
     {
         static void Main(string[] args)
         {
-            GramSchmidtRotation4DSample.Execute();
+            OrthogonalRotorsDecompositionSample.Execute();
 
             Console.WriteLine();
             Console.WriteLine(@"Press any key to exit...");

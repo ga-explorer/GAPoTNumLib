@@ -2,8 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using GAPoTNumLib.Text;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace GAPoTNumLib.GAPoT
 {
@@ -18,11 +21,16 @@ namespace GAPoTNumLib.GAPoT
             //);
         }
 
+        public static GaPoTNumRotorsSequence Create(params GaPoTNumMultivector[] rotorsList)
+        {
+            return new GaPoTNumRotorsSequence(rotorsList);
+        }
+
         public static GaPoTNumRotorsSequence Create(IEnumerable<GaPoTNumMultivector> rotorsList)
         {
             return new GaPoTNumRotorsSequence(rotorsList);
         }
-        
+
         public static GaPoTNumRotorsSequence CreateFromOrthonormalFrames(GaPoTNumFrame sourceFrame, GaPoTNumFrame targetFrame)
         {
             Debug.Assert(targetFrame.Count == sourceFrame.Count);
@@ -98,6 +106,17 @@ namespace GAPoTNumLib.GAPoT
             }
 
             return rotorsSequence;
+        }
+
+        public static GaPoTNumRotorsSequence CreateOrthogonalRotors(double[,] rotationMatrix)
+        {
+            var evdSolver = Matrix.Build.DenseOfArray(rotationMatrix).Evd();
+
+            var eigenValuesReal = evdSolver.EigenValues.Real();
+            var eigenValuesImag = evdSolver.EigenValues.Imaginary();
+            var eigenVectors = evdSolver.EigenVectors;
+
+            return new GaPoTNumRotorsSequence();
         }
 
 

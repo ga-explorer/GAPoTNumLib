@@ -3,12 +3,18 @@ gapotInit;
 
 clc;
 
-n = 5;
+R = gapotParseBiversor("3.1009536313039 <>, -1.28445705037617 <1,3>, -0.985598559653489 <2,3>, 0.408248290463863 <1,2>");
 
-gapotDefineBasisBlades(n, 'e');
+R1 = R.ToMultivector();
 
-mv = (3 * e12 - 2 * e123 + 4.6 * e245) / 5
+R1.Gp(R1.Reverse()).TermsToText()
 
-e123.TermsToText()
+%n = 5;
 
-mv.TermsToText()
+%gapotDefineBasisBlades(n, 'e');
+
+%mv = (3 * e12 - 2 * e123 + 4.6 * e245) / 5
+
+%e123.TermsToText()
+
+%mv.TermsToText()

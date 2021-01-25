@@ -185,7 +185,11 @@ namespace GAPoTNumLib.GAPoT
             
             return new GaPoTNumMultivectorTerm(IDsPattern, value);
         }
-        
+
+        public GaPoTNumMultivectorTerm Round(int places)
+        {
+            return new GaPoTNumMultivectorTerm(IDsPattern, Math.Round(Value, places));
+        }
 
         public GaPoTNumVectorTerm ToVectorTerm()
         {

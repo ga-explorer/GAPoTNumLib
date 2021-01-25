@@ -22,6 +22,85 @@ namespace GAPoTNumLib.GAPoT
             });
         }
         
+        public static GaPoTNumMultivector CreateSimpleRotor(GaPoTNumVector sourceVector, GaPoTNumVector targetVector)
+        {
+            var invNorm1 = 1.0d / sourceVector.Norm();
+            var invNorm2 = 1.0d / targetVector.Norm();
+            var cosAngle = sourceVector.DotProduct(targetVector) * invNorm1 * invNorm2;
+
+            if (cosAngle == 1.0d)
+                return new GaPoTNumMultivector().SetTerm(0, 1.0d);
+            
+            //TODO: Handle the case for cosAngle == -1
+            
+            var cosHalfAngle = Math.Sqrt(0.5d * (1.0d + cosAngle));
+            var sinHalfAngle = Math.Sqrt(0.5d * (1.0d - cosAngle));
+            var rotationBlade = sourceVector.Op(targetVector);
+
+            var rotationBladeScalar = 
+                sinHalfAngle / 
+                Math.Sqrt(Math.Abs(rotationBlade.Gp(rotationBlade).GetTermValue(0)));
+
+            var rotor= cosHalfAngle - rotationBladeScalar * rotationBlade;
+
+            //var rotationAngle = Math.Acos(DotProduct(v2) * invNorm1 * invNorm2) / 2;
+            //var unitBlade = rotationBlade.ScaleBy(rotationBladeInvNorm);
+            //var unitBladeNorm = unitBlade.Gp(unitBlade).TermsToText();
+            //var rotor= Math.Cos(rotationAngle) - (rotationBladeInvNorm * Math.Sin(rotationAngle)) * rotationBlade;
+
+            //Normalize rotor
+            //var invRotorNorm = 1.0d / Math.Sqrt(rotor.Gp(rotor.Reverse()).GetTermValue(0));
+
+            //rotor.IsSimpleRotor();
+            
+            return rotor;
+        }
+
+        /// <summary>
+        /// Create a simple rotor from an angle and a blade
+        /// </summary>
+        /// <param name="rotationAngle"></param>
+        /// <param name="rotationBlade"></param>
+        /// <returns></returns>
+        public static GaPoTNumMultivector CreateSimpleRotor(double rotationAngle, GaPoTNumMultivector rotationBlade)
+        {
+            var cosHalfAngle = Math.Cos(rotationAngle / 2.0d);
+            var sinHalfAngle = Math.Sin(rotationAngle / 2.0d);
+
+            var rotationBladeScalar =
+                sinHalfAngle / 
+                Math.Sqrt(Math.Abs(rotationBlade.Gp(rotationBlade).GetTermValue(0)));
+
+            var rotor=  
+                cosHalfAngle + rotationBladeScalar * rotationBlade;
+
+            //rotor.IsSimpleRotor();
+
+            return rotor;
+        }
+
+        /// <summary>
+        /// Construct a rotor in the e_i-e_j plane with the given angle where i is less than j
+        /// See: Computational Methods in Engineering by S.P. Venkateshan and Prasanna Swaminathan
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static GaPoTNumMultivector CreateGivensRotor(int i, int j, double angle)
+        {
+            Debug.Assert(i > 0 && j > i);
+
+            var cosHalfAngle = Math.Cos(angle / 2.0d);
+            var sinHalfAngle = Math.Sin(angle / 2.0d);
+
+            var bladeId = (1 << (i - 1)) | (1 << (j - 1));
+
+            return new GaPoTNumMultivector()
+                .AddTerm(0, cosHalfAngle)
+                .AddTerm(bladeId, sinHalfAngle);
+        }
+
         
         public static GaPoTNumMultivector operator -(GaPoTNumMultivector v)
         {
@@ -344,6 +423,21 @@ namespace GAPoTNumLib.GAPoT
             return biversor;
         }
 
+        /// <summary>
+        /// Assuming this multivector is a simple rotor, this extracts its angle and 2-blade of rotation
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<double, GaPoTNumMultivector> GetSimpleRotorAngleBlade()
+        {
+            var scalarPart = GetTermValue(0);
+            var bivectorPart = new GaPoTNumMultivector(GetTermsOfGrade(2));
+
+            var halfAngle = Math.Acos(scalarPart);
+            var angle = 2.0d * halfAngle;
+            var blade = bivectorPart / Math.Sin(halfAngle);
+
+            return new Tuple<double, GaPoTNumMultivector>(angle, blade);
+        }
 
         public GaPoTNumMultivector Op(GaPoTNumMultivector mv2)
         {
@@ -475,6 +569,13 @@ namespace GAPoTNumLib.GAPoT
         {
             return new GaPoTNumMultivector(
                 _termsDictionary.Values.Select(t => t.ScaledReverse(s))
+            );
+        }
+
+        public GaPoTNumMultivector Round(int places)
+        {
+            return new GaPoTNumMultivector(
+                _termsDictionary.Values.Select(t => t.Round(places)).Where(t => !t.Value.IsNearZero())
             );
         }
 

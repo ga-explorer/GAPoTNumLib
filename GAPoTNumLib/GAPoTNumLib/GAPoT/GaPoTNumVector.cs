@@ -626,33 +626,7 @@ namespace GAPoTNumLib.GAPoT
 
         public GaPoTNumMultivector GetRotorToVector(GaPoTNumVector v2)
         {
-            var invNorm1 = 1.0d / Norm();
-            var invNorm2 = 1.0d / v2.Norm();
-            var cosAngle = DotProduct(v2) * invNorm1 * invNorm2;
-
-            if (cosAngle == 1.0d)
-                return new GaPoTNumMultivector(new []{ new GaPoTNumMultivectorTerm(0, 1) });
-            
-            //TODO: Handle the case for cosAngle == -1
-            
-            var cosHalfAngle = Math.Sqrt(0.5d * (1.0d + cosAngle));
-            var sinHalfAngle = Math.Sqrt(0.5d * (1.0d - cosAngle));
-            var rotationBlade = Op(v2);
-
-            var rotationBladeScalar = 
-                sinHalfAngle / Math.Sqrt(Math.Abs(rotationBlade.Gp(rotationBlade).GetTermValue(0)));
-
-            var rotor= cosHalfAngle - rotationBladeScalar * rotationBlade;
-
-            //var rotationAngle = Math.Acos(DotProduct(v2) * invNorm1 * invNorm2) / 2;
-            //var unitBlade = rotationBlade.ScaleBy(rotationBladeInvNorm);
-            //var unitBladeNorm = unitBlade.Gp(unitBlade).TermsToText();
-            //var rotor= Math.Cos(rotationAngle) - (rotationBladeInvNorm * Math.Sin(rotationAngle)) * rotationBlade;
-
-            //Normalize rotor
-            //var invRotorNorm = 1.0d / Math.Sqrt(rotor.Gp(rotor.Reverse()).GetTermValue(0));
-            
-            return rotor;
+            return GaPoTNumMultivector.CreateSimpleRotor(this, v2);
         }
         
         public GaPoTNumVector ApplyRotor(GaPoTNumMultivector rotor)
@@ -695,6 +669,13 @@ namespace GAPoTNumLib.GAPoT
         public GaPoTNumVector GetProjectionOnBlade(GaPoTNumMultivector blade)
         {
             return ToMultivector().Lcp(blade).Lcp(blade.Inverse()).GetVectorPart();
+        }
+
+        public GaPoTNumVector Round(int places)
+        {
+            return new GaPoTNumVector(
+                _termsDictionary.Values.Select(t => t.Round(places)).Where(t => !t.Value.IsNearZero())
+            );
         }
 
         public double Norm()

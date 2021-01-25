@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Numerics;
 using GAPoTNumLib.Interop.MATLAB;
 using GAPoTNumLib.Structures;
-using GAPoTNumLib.Text;
 using Irony.Parsing;
+using Matrix = MathNet.Numerics.LinearAlgebra.Complex.Matrix;
+using Vector = MathNet.Numerics.LinearAlgebra.Complex.Vector;
 
 namespace GAPoTNumLib.GAPoT
 {
@@ -523,6 +524,31 @@ namespace GAPoTNumLib.GAPoT
             }
         }
 
+        public static Complex[,] ToComplexArray(this double[,] realArray)
+        {
+            var rowsCount = realArray.GetLength(0);
+            var colsCount = realArray.GetLength(1);
+
+            var complexArray = new Complex[rowsCount, colsCount];
+
+            for (var i = 0; i < rowsCount; i++)
+            for (var j = 0; j < colsCount; j++)
+                complexArray[i, j] = new Complex(realArray[i, j], 0.0d);
+
+            return complexArray;
+        }
+
+        public static void EigenDecomposition(this Matrix matrix, out Complex[] values, out Vector[] vectors)
+        {
+            var sysExpr = matrix.Evd();
+
+            values = sysExpr.EigenValues.ToArray();
+
+            vectors = new Vector[sysExpr.EigenVectors.ColumnCount];
+
+            for (var i = 0; i < vectors.Length; i++)
+                vectors[i] = (Vector)sysExpr.EigenVectors.Column(i);
+        }
 
         public static GaNumMatlabSparseMatrixData PolarPhasorsToMatlabArray(this IEnumerable<GaPoTNumPolarPhasor> phasorsList, int rowsCount)
         {
