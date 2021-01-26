@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using GAPoTNumLib.Structures;
 using GAPoTNumLib.Text;
 
 namespace GAPoTNumLib.GAPoT
@@ -372,6 +373,20 @@ namespace GAPoTNumLib.GAPoT
             return _termsDictionary.Values.Where(t => !t.Value.IsNearZero());
         }
 
+        public IEnumerable<GaPoTNumMultivectorTerm> GetGradeOrderedTerms()
+        {
+            var maxGrade = _termsDictionary.Keys.Max(id => id.CountOnes());
+
+            if (maxGrade == 0)
+                return _termsDictionary.Values;
+
+            return _termsDictionary
+                .Values
+                .Where(t => !t.Value.IsNearZero())
+                .OrderBy(t => t.GetGrade())
+                .ThenByDescending(t => t.IDsPattern.ReverseBits(maxGrade));
+        }
+
         public IEnumerable<GaPoTNumMultivectorTerm> GetNonZeroTerms()
         {
             return _termsDictionary.Values.Where(t => !t.Value.IsNearZero());
@@ -393,11 +408,23 @@ namespace GAPoTNumLib.GAPoT
                 : 0.0d;
         }
 
+        public double GetScalar()
+        {
+            return GetTermValue(0);
+        }
+
         public GaPoTNumMultivectorTerm GetTerm(int idsPattern)
         {
             var value = GetTermValue(idsPattern);
 
             return new GaPoTNumMultivectorTerm(idsPattern, value);
+        }
+
+        public GaPoTNumMultivector GetKVectorPart(int grade)
+        {
+            return new GaPoTNumMultivector(
+                _termsDictionary.Values.Where(t => t.GetGrade() == grade)
+            );
         }
 
         public GaPoTNumVector GetVectorPart()
@@ -586,11 +613,9 @@ namespace GAPoTNumLib.GAPoT
 
         public double Norm2()
         {
-            return _termsDictionary.Values.Sum(term => 
-                term.IDsPattern.BasisBladeHasNegativeReverse()
-                    ? -term.Value * term.Value
-                    : term.Value * term.Value
-            );
+            return _termsDictionary
+                .Values
+                .Sum(term => term.Value * term.Value);
         }
 
         public GaPoTNumMultivector Inverse()
@@ -621,7 +646,17 @@ namespace GAPoTNumLib.GAPoT
             
             return new GaPoTNumMultivector(termsArray);
         }
-        
+
+        public GaPoTNumMultivector DivideByNorm()
+        {
+            return this / Norm();
+        }
+
+        public GaPoTNumMultivector DivideByNorm2()
+        {
+            return this / Norm2();
+        }
+
         public GaPoTNumMultivector ApplyRotor(GaPoTNumMultivector rotor)
         {
             var r1 = rotor;
@@ -629,22 +664,32 @@ namespace GAPoTNumLib.GAPoT
 
             return r1.Gp(this).Gp(r2);
         }
-        
-        
+
+
+        public string ToText()
+        {
+            return TermsToText();
+        }
+
         public string TermsToText()
         {
             var termsArray = 
-                GetTerms().ToArray();
+                GetGradeOrderedTerms().ToArray();
 
             return termsArray.Length == 0
                 ? "0"
                 : termsArray.Select(t => t.ToText()).Concatenate(", ", 80);
         }
 
+        public string ToLaTeX()
+        {
+            return TermsToLaTeX();
+        }
+
         public string TermsToLaTeX()
         {
             var termsArray = 
-                GetTerms().ToArray();
+                GetGradeOrderedTerms().ToArray();
 
             return termsArray.Length == 0
                 ? "0"

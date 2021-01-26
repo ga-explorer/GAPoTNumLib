@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using GAPoTNumLib.GAPoT;
-using GAPoTNumLib.Text;
 using GAPoTNumLib.Text.LaTeX;
 
 namespace GAPoTNumLib.Framework.Samples

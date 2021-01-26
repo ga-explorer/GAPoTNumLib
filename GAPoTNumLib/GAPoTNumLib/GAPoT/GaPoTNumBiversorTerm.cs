@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using GAPoTNumLib.Text;
 using GAPoTNumLib.Text.LaTeX;
 
 namespace GAPoTNumLib.GAPoT

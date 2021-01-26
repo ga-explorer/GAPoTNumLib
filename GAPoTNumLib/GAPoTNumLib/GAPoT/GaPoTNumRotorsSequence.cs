@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Tracing;
 using System.Linq;
 using GAPoTNumLib.Text;
 using MathNet.Numerics.LinearAlgebra;

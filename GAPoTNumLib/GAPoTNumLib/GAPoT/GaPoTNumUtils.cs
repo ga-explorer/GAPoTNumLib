@@ -187,19 +187,27 @@ namespace GAPoTNumLib.GAPoT
             return (id1 & ~id2) == 0;
         }
 
-        public static int GetBasisBladeGrade(this int idsPattern)
-        {
-            var grade = 0;
-            while (idsPattern > 0)
-            {
-                if ((idsPattern & 1) != 0)
-                    grade++;
+        //public static int ReverseBits(this int bitsPattern, int bitsCount)
+        //{
+        //    Debug.Assert(
+        //        bitsCount > 0 && 
+        //        bitsPattern < (1 << bitsCount)
+        //    );
 
-                idsPattern >>= 1;
-            }
+        //    var result = 0;
 
-            return grade;
-        }
+        //    var i = bitsCount - 1;
+        //    while (bitsPattern != 0)
+        //    {
+        //        if ((bitsPattern & 1) != 0)
+        //            result |= (1 << i);
+
+        //        i--;
+        //        bitsPattern >>= 1;
+        //    }
+
+        //    return result;
+        //}
         
         /// <summary>
         /// Test if the reverse of a basis blade with a given grade is -1 the original basis blade
@@ -222,7 +230,7 @@ namespace GAPoTNumLib.GAPoT
         /// <returns></returns>
         public static bool BasisBladeHasNegativeReverse(this int idsPattern)
         {
-            var grade = idsPattern.GetBasisBladeGrade();
+            var grade = idsPattern.CountOnes();
             
             return grade % 4 > 1;
 
@@ -236,7 +244,7 @@ namespace GAPoTNumLib.GAPoT
 
         public static bool BasisBladeHasNegativeGradeInv(this int idsPattern)
         {
-            var grade = idsPattern.GetBasisBladeGrade();
+            var grade = idsPattern.CountOnes();
             
             return (grade & 1) != 0;
         }
@@ -251,7 +259,7 @@ namespace GAPoTNumLib.GAPoT
 
         public static bool BasisBladeHasNegativeCliffConj(this int idsPattern)
         {
-            var grade = idsPattern.GetBasisBladeGrade();
+            var grade = idsPattern.CountOnes();
             
             var v = grade % 4;
             return v == 1 || v == 2;

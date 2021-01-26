@@ -36,6 +36,34 @@ namespace GAPoTNumLib.GAPoT
             return biversor;
         }
 
+        public static GaPoTNumBiversor operator +(GaPoTNumBiversor v, double s)
+        {
+            return new GaPoTNumBiversor(
+                v._termsDictionary.Values
+            ).AddTerm(0,0, s);
+        }
+
+        public static GaPoTNumBiversor operator +(double s, GaPoTNumBiversor v)
+        {
+            return new GaPoTNumBiversor(
+                v._termsDictionary.Values
+            ).AddTerm(0,0, s);
+        }
+
+        public static GaPoTNumBiversor operator -(GaPoTNumBiversor v, double s)
+        {
+            return new GaPoTNumBiversor(
+                v._termsDictionary.Values
+            ).AddTerm(0,0, -s);
+        }
+
+        public static GaPoTNumBiversor operator -(double s, GaPoTNumBiversor v)
+        {
+            return new GaPoTNumBiversor(
+                v._termsDictionary.Values.Select(t => -t)
+            ).AddTerm(0,0, s);
+        }
+
         public static GaPoTNumBiversor operator *(GaPoTNumBiversor v, double s)
         {
             return new GaPoTNumBiversor(
@@ -199,6 +227,18 @@ namespace GAPoTNumLib.GAPoT
                 .Sum();
         }
 
+        public double GetScalar()
+        {
+            return GetTermValue(0, 0);
+        }
+
+
+        public GaPoTNumBiversor GetBivectorPart()
+        {
+            return new GaPoTNumBiversor(
+                _termsDictionary.Values.Where(t => t.IsNonScalar)
+            );
+        }
 
         public GaPoTNumBiversor GetTermPart(int id1, int id2)
         {
@@ -302,12 +342,10 @@ namespace GAPoTNumLib.GAPoT
 
         public double Norm2()
         {
-            return Math.Abs(
-                _termsDictionary
-                    .Values
-                    .Select(t => t.Value * t.Value)
-                    .Sum()
-            );
+            return _termsDictionary
+                .Values
+                .Select(t => t.Value * t.Value)
+                .Sum();
         }
 
         public GaPoTNumBiversor Inverse()
@@ -324,6 +362,16 @@ namespace GAPoTNumLib.GAPoT
                     .Values
                     .Select(t => t.ScaledReverse(value))
             );
+        }
+
+        public GaPoTNumBiversor DivideByNorm()
+        {
+            return this / Norm();
+        }
+
+        public GaPoTNumBiversor DivideByNorm2()
+        {
+            return this / Norm2();
         }
 
         public GaPoTNumVector Gp(GaPoTNumVector v)
@@ -351,8 +399,11 @@ namespace GAPoTNumLib.GAPoT
 
         public string TermsToText()
         {
-            var termsArray = 
-                GetTerms().ToArray();
+            var termsArray = GetTerms()
+                .Where(t => !t.Value.IsNearZero())
+                .OrderBy(t => t.TermId1)
+                .ThenBy(t => t.TermId2)
+                .ToArray();
 
             return termsArray.Length == 0
                 ? "0"
@@ -366,8 +417,11 @@ namespace GAPoTNumLib.GAPoT
 
         public string TermsToLaTeX()
         {
-            var termsArray = 
-                GetTerms().ToArray();
+            var termsArray = GetTerms()
+                .Where(t => !t.Value.IsNearZero())
+                .OrderBy(t => t.TermId1)
+                .ThenBy(t => t.TermId2)
+                .ToArray();
 
             return termsArray.Length == 0
                 ? "0"

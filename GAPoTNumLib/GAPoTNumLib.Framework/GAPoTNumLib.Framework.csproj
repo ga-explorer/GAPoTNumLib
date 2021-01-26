@@ -99,6 +99,7 @@
     <Compile Include="Samples\Sample6.cs" />
     <Compile Include="Samples\Sample7.cs" />
     <Compile Include="Samples\ClarkeRotation4DSample.cs" />
+    <Compile Include="Samples\Validations\ValidationSample1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

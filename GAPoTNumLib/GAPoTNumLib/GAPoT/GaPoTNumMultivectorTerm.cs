@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using GAPoTNumLib.Structures;
 using GAPoTNumLib.Text;
 using GAPoTNumLib.Text.LaTeX;
 
@@ -54,7 +55,7 @@ namespace GAPoTNumLib.GAPoT
         public double Value { get; set; }
 
 
-        internal GaPoTNumMultivectorTerm(int idsPattern)
+        public GaPoTNumMultivectorTerm(int idsPattern)
         {
             Debug.Assert(idsPattern >= 0);
 
@@ -62,7 +63,7 @@ namespace GAPoTNumLib.GAPoT
             Value = 0;
         }
 
-        internal GaPoTNumMultivectorTerm(int idsPattern, double value)
+        public GaPoTNumMultivectorTerm(int idsPattern, double value)
         {
             Debug.Assert(idsPattern >= 0);
 
@@ -87,9 +88,19 @@ namespace GAPoTNumLib.GAPoT
 
         public int GetGrade()
         {
-            return IDsPattern.GetBasisBladeGrade();
+            return IDsPattern.CountOnes();
         }
 
+        
+        public double Norm()
+        {
+            return Math.Abs(Value);
+        }
+
+        public double Norm2()
+        {
+            return Value * Value;
+        }
 
         public GaPoTNumMultivectorTerm Op(GaPoTNumMultivectorTerm term2)
         {

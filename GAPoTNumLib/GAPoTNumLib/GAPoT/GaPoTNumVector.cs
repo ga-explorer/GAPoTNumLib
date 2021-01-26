@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using GAPoTNumLib.Interop.MATLAB;
@@ -687,7 +686,7 @@ namespace GAPoTNumLib.GAPoT
         {
             return _termsDictionary
                 .Values
-                .Select(p => p.Norm2())
+                .Select(p => p.Value * p.Value)
                 .Sum();
         }
 
@@ -709,6 +708,16 @@ namespace GAPoTNumLib.GAPoT
                 );
 
             return result;
+        }
+
+        public GaPoTNumVector DivideByNorm()
+        {
+            return this / Norm();
+        }
+
+        public GaPoTNumVector DivideByNorm2()
+        {
+            return this / Norm2();
         }
 
         public GaPoTNumVector OffsetTermIDs(int delta)
@@ -757,8 +766,10 @@ namespace GAPoTNumLib.GAPoT
 
         public string TermsToText()
         {
-            var termsArray = 
-                GetTerms().Where(t => !t.IsZero()).ToArray();
+            var termsArray = GetTerms()
+                .Where(t => !t.IsZero())
+                .OrderBy(t => t.TermId)
+                .ToArray();
 
             return termsArray.Length == 0
                 ? "0"
@@ -769,8 +780,10 @@ namespace GAPoTNumLib.GAPoT
         {
             //var dcTerm = GetTerm(0);
 
-            var termsArray = 
-                GeTPolarPhasors().Where(t => !t.IsZero()).ToArray();
+            var termsArray = GeTPolarPhasors()
+                .Where(t => !t.IsZero())
+                .OrderBy(t => t.Id)
+                .ToArray();
 
             //if (dcTerm.IsZero())
                 return termsArray.Length == 0
@@ -786,8 +799,10 @@ namespace GAPoTNumLib.GAPoT
         {
             //var dcTerm = GetTerm(0);
 
-            var termsArray = 
-                GeTRectPhasors().Where(t => !t.IsZero()).ToArray();
+            var termsArray = GeTRectPhasors()
+                .Where(t => !t.IsZero())
+                .OrderBy(t => t.Id)
+                .ToArray();
 
             //if (dcTerm.IsZero())
                 return termsArray.Length == 0
@@ -807,8 +822,10 @@ namespace GAPoTNumLib.GAPoT
 
         public string TermsToLaTeX()
         {
-            var termsArray = 
-                GetTerms().Where(t => !t.IsZero()).ToArray();
+            var termsArray = GetTerms()
+                .Where(t => !t.IsZero())
+                .OrderBy(t => t.TermId)
+                .ToArray();
 
             return termsArray.Length == 0
                 ? "0"
@@ -819,8 +836,10 @@ namespace GAPoTNumLib.GAPoT
         {
             //var dcTerm = GetTerm(0);
 
-            var termsArray = 
-                GeTPolarPhasors().Where(t => !t.IsZero()).ToArray();
+            var termsArray = GeTPolarPhasors()
+                .Where(t => !t.IsZero())
+                .OrderBy(t => t.Id)
+                .ToArray();
 
             //if (dcTerm.IsZero())
                 return termsArray.Length == 0
@@ -836,8 +855,10 @@ namespace GAPoTNumLib.GAPoT
         {
             //var dcTerm = GetTerm(0);
 
-            var termsArray = 
-                GeTRectPhasors().Where(t => !t.IsZero()).ToArray();
+            var termsArray = GeTRectPhasors()
+                .Where(t => !t.IsZero())
+                .OrderBy(t => t.Id)
+                .ToArray();
 
             //if (dcTerm.IsZero())
                 return termsArray.Length == 0

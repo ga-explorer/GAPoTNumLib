@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using GAPoTNumLib.GAPoT;
 
 namespace GAPoTNumLib.Framework.Samples
