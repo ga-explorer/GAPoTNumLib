@@ -1,5 +1,5 @@
 # GAPoTNumLib
-Gaometric Algebra Power Theory Numerical Library
+Geometric Algebra Power Theory Numerical Library
 
 Requirements and Testing: 
 Francisco G. Montoya, University of Almeria (Spain)
