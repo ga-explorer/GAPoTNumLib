@@ -622,20 +622,19 @@ namespace GAPoTNumLib.GAPoT
         {
             var norm2 = 0.0d;
             var termsArray = new GaPoTNumMultivectorTerm[_termsDictionary.Count];
+
             var i = 0;
             foreach (var term in _termsDictionary.Values)
             {
-                if (term.IDsPattern.BasisBladeHasNegativeReverse())
-                {
-                    termsArray[i] =  new GaPoTNumMultivectorTerm(term.IDsPattern, -term.Value);
-                    norm2 += -term.Value * term.Value;
-                }
-                else
-                {
-                    termsArray[i] =  new GaPoTNumMultivectorTerm(term.IDsPattern, term.Value);
-                    norm2 += term.Value * term.Value;
-                }
-                
+                termsArray[i] = new GaPoTNumMultivectorTerm(
+                    term.IDsPattern,
+                    term.IDsPattern.BasisBladeHasNegativeReverse()
+                        ? -term.Value 
+                        : term.Value
+                );
+
+                norm2 += term.Value * term.Value;
+
                 i++;
             }
 

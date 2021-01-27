@@ -403,7 +403,7 @@ namespace GAPoTNumLib.Structures
         {
             Debug.Assert(
                 bitsCount > 0 && 
-                bitPattern < (1 << bitsCount)
+                bitPattern < (1 << (bitsCount + 1))
             );
 
             var result = 0;
