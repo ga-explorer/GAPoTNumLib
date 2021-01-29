@@ -22,6 +22,14 @@ namespace GAPoTNumLib.GAPoT
             );
         }
 
+        public static GaPoTNumVector CreateUnitAutoVector(int n)
+        {
+            var d = 1.0d / Math.Sqrt(n);
+
+            return new GaPoTNumVector(
+                Enumerable.Repeat(d, n)
+            );
+        }
 
         public static GaPoTNumVector operator -(GaPoTNumVector v)
         {

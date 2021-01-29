@@ -375,16 +375,16 @@ namespace GAPoTNumLib.GAPoT
 
         public IEnumerable<GaPoTNumMultivectorTerm> GetGradeOrderedTerms()
         {
-            var maxGrade = _termsDictionary.Keys.Max(id => id.CountOnes());
+            var bitsCount = _termsDictionary.Keys.Max().LastOneBitPosition() + 1;
 
-            if (maxGrade == 0)
+            if (bitsCount == 0)
                 return _termsDictionary.Values;
 
             return _termsDictionary
                 .Values
                 .Where(t => !t.Value.IsNearZero())
                 .OrderBy(t => t.GetGrade())
-                .ThenByDescending(t => t.IDsPattern.ReverseBits(maxGrade));
+                .ThenByDescending(t => t.IDsPattern.ReverseBits(bitsCount));
         }
 
         public IEnumerable<GaPoTNumMultivectorTerm> GetNonZeroTerms()

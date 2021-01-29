@@ -7,7 +7,7 @@ namespace GAPoTNumLib.Framework
     {
         static void Main(string[] args)
         {
-            ValidationSample1.Execute();
+            ValidationSample1.Execute3();
 
             Console.WriteLine();
             Console.WriteLine(@"Press any key to exit...");
