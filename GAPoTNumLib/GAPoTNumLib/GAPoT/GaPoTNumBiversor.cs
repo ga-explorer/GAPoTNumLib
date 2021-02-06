@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GAPoTNumLib.Interop.MATLAB;
@@ -7,7 +8,7 @@ using GAPoTNumLib.Text;
 
 namespace GAPoTNumLib.GAPoT
 {
-    public sealed class GaPoTNumBiversor
+    public sealed class GaPoTNumBiversor : IEnumerable<GaPoTNumBiversorTerm>
     {
         public static GaPoTNumBiversor operator -(GaPoTNumBiversor v)
         {
@@ -85,6 +86,11 @@ namespace GAPoTNumLib.GAPoT
             return new GaPoTNumBiversor(
                 v._termsDictionary.Values.Select(t => s * t)
             );
+        }
+
+        public static GaPoTNumBiversor operator /(double s, GaPoTNumBiversor v)
+        {
+            return s * v.Inverse();
         }
 
 
@@ -427,11 +433,20 @@ namespace GAPoTNumLib.GAPoT
                 ? "0"
                 : string.Join(" + ", termsArray.Select(t => t.ToLaTeX()));
         }
- 
 
         public override string ToString()
         {
             return TermsToText();
+        }
+
+        public IEnumerator<GaPoTNumBiversorTerm> GetEnumerator()
+        {
+            return _termsDictionary.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

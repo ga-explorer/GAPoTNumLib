@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using GAPoTNumLib.Interop.MATLAB;
-using GAPoTNumLib.Text; //using CodeComposerLib.MathML.Values;
+using GAPoTNumLib.Text;
 
 namespace GAPoTNumLib.GAPoT
 {
-    public sealed class GaPoTNumVector : IReadOnlyList<double>
+    public sealed class GaPoTNumVector : IEnumerable<GaPoTNumVectorTerm>
     {
         public static GaPoTNumVector CreateZero()
         {
@@ -80,7 +80,7 @@ namespace GAPoTNumLib.GAPoT
         }
 
         /// <summary>
-        /// The geometric product of two single phase GAPoT vectors
+        /// The geometric product of two GAPoT vectors is a biversor
         /// </summary>
         /// <param name="v1"></param>
         /// <param name="v2"></param>
@@ -219,6 +219,27 @@ namespace GAPoTNumLib.GAPoT
             return result;
         }
 
+        /// <summary>
+        /// The geometric product of two GAPoT vectors is a biversor
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        /// <returns></returns>
+        public static GaPoTNumBiversor operator /(GaPoTNumVector v1, GaPoTNumVector v2)
+        {
+            return v1 * v2.Inverse();
+        }
+
+        public static GaPoTNumVector operator /(GaPoTNumBiversor bv1, GaPoTNumVector v2)
+        {
+            return bv1 * v2.Inverse();
+        }
+
+        public static GaPoTNumVector operator /(GaPoTNumVector v1, GaPoTNumBiversor bv2)
+        {
+            return v1 * bv2.Inverse();
+        }
+
         public static GaPoTNumVector operator /(GaPoTNumVector v, double s)
         {
             s = 1.0d / s;
@@ -232,6 +253,11 @@ namespace GAPoTNumLib.GAPoT
                 );
 
             return result;
+        }
+
+        public static GaPoTNumVector operator /(double s, GaPoTNumVector v)
+        {
+            return s * v.Inverse();
         }
 
 
@@ -707,12 +733,12 @@ namespace GAPoTNumLib.GAPoT
             if (norm2 == 0)
                 throw new DivideByZeroException();
 
-            var value = 1.0d / norm2;
+            var invNorm2 = 1.0d / norm2;
 
             foreach (var term in _termsDictionary.Values)
                 result.SetTerm(
                     term.TermId,
-                    term.Value * value
+                    term.Value * invNorm2
                 );
 
             return result;
@@ -878,26 +904,19 @@ namespace GAPoTNumLib.GAPoT
             //    : dcTerm.ToLaTeX() + " + " + termsArray.Select(t => t.ToLaTeX()).Concatenate(" + ");
         }
 
-
-        public IEnumerator<double> GetEnumerator()
+        public override string ToString()
         {
-            return _termsDictionary
-                .Values
-                .Select(v => v.Value)
-                .GetEnumerator();
+            return ToText();
+        }
+
+        public IEnumerator<GaPoTNumVectorTerm> GetEnumerator()
+        {
+            return _termsDictionary.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _termsDictionary
-                .Values
-                .Select(v => v.Value)
-                .GetEnumerator();
-        }
-
-        public override string ToString()
-        {
-            return ToText();
+            return _termsDictionary.Values.GetEnumerator();
         }
     }
 }

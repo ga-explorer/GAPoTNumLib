@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,7 +9,7 @@ using GAPoTNumLib.Text;
 
 namespace GAPoTNumLib.GAPoT
 {
-    public sealed class GaPoTNumMultivector
+    public sealed class GaPoTNumMultivector : IEnumerable<GaPoTNumMultivectorTerm>
     {
         public static GaPoTNumMultivector CreateZero()
         {
@@ -252,6 +253,11 @@ namespace GAPoTNumLib.GAPoT
 
             return result;
         }
+        
+        public static GaPoTNumMultivector operator /(GaPoTNumMultivector v1, GaPoTNumMultivector v2)
+        {
+            return v1 * v2.Inverse();
+        }
 
         public static GaPoTNumMultivector operator /(GaPoTNumMultivector v, double s)
         {
@@ -268,7 +274,11 @@ namespace GAPoTNumLib.GAPoT
             return result;
         }
 
-        
+        public static GaPoTNumMultivector operator /(double s, GaPoTNumMultivector v)
+        {
+            return s * v.Inverse();
+        }
+
         
         private readonly Dictionary<int, GaPoTNumMultivectorTerm> _termsDictionary
             = new Dictionary<int, GaPoTNumMultivectorTerm>();
@@ -731,10 +741,19 @@ namespace GAPoTNumLib.GAPoT
             return textComposer.ToString();
         }
 
-
         public override string ToString()
         {
             return TermsToText();
+        }
+
+        public IEnumerator<GaPoTNumMultivectorTerm> GetEnumerator()
+        {
+            return _termsDictionary.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

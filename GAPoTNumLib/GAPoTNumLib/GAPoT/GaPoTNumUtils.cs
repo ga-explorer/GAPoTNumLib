@@ -626,6 +626,27 @@ namespace GAPoTNumLib.GAPoT
         {
             return new GaPoTNumMultivector(termsList);
         }
+        
+        public static IEnumerable<GaPoTNumMultivectorTerm> OrderByGrade(this IEnumerable<GaPoTNumMultivectorTerm> termsList)
+        {
+            var termsArray = termsList.ToArray();
+            var bitsCount = termsArray.Max(t => t.IDsPattern).LastOneBitPosition() + 1;
+
+            if (bitsCount == 0)
+                return termsArray;
+
+            return termsArray
+                .Where(t => !t.Value.IsNearZero())
+                .OrderBy(t => t.GetGrade())
+                .ThenByDescending(t => t.IDsPattern.ReverseBits(bitsCount));
+        }
+        
+        public static IEnumerable<GaPoTNumMultivectorTerm> OrderById(this IEnumerable<GaPoTNumMultivectorTerm> termsList)
+        {
+            return termsList
+                .Where(t => !t.Value.IsNearZero())
+                .OrderBy(t => t.IDsPattern);
+        }
 
         public static GaNumMatlabSparseMatrixData TermsToMatlabArray(this IEnumerable<GaPoTNumVectorTerm> termsList, int rowsCount)
         {
