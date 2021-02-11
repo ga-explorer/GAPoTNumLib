@@ -20,3 +20,5 @@ In this way, the aim is to learn more about the library and its practical applic
 
 ## Table of contents
 1. [Installation](installation.md)
+2. [Library initialization](initialitation.md)
+3. [Type definitions and conversion](definitions.md)
