@@ -17,3 +17,5 @@ This paper, under the supervision of Dr. Francisco G. Montoya (University of Alm
 * A three-phase circuit (with harmonics)
 
 In this way, the aim is to learn more about the library and its practical application.
+
+## Table of contents
