@@ -19,3 +19,4 @@ This paper, under the supervision of Dr. Francisco G. Montoya (University of Alm
 In this way, the aim is to learn more about the library and its practical application.
 
 ## Table of contents
+1. [Installation](installation.md)
