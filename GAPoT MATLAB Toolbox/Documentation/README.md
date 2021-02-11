@@ -1,8 +1,8 @@
 <!--<div id='introduccion'/>-->
 
-#GaPoTNumLib MATLAB Toolbox
+# GaPoTNumLib MATLAB Toolbox
 
-##GaPoTNumLib MATLAB Toolbox is a MATLAB library that integrates a branch of Mathematics: Geometric Algebra (GA).
+## GaPoTNumLib MATLAB Toolbox is a MATLAB library that integrates a branch of Mathematics: Geometric Algebra (GA).
 
 In the field of electrical engineering, GA is becoming very popular. This branch introduces new mathematical operators: the outer product and the geometric product, which groups the outer and inner product. The scalar or inner product of two vectors (σ1,σ2) is used in other algebras, so it is widely known. Its result is a scalar. On the other hand, the outer product of two vectors (which must also be non-coincident) results in a new mathematical object: the biversor (σ12), which will represent a plane. The outer product between vectors and biversors will generate elements of higher dimensionality: the trivectors (and generically, multivectors).
 
